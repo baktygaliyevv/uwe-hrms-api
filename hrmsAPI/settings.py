@@ -75,10 +75,15 @@ WSGI_APPLICATION = 'hrmsAPI.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.dummy', # глушит орм от джанго
-        'NAME': BASE_DIR / 'db.sqlite3', #имя нашей дб
+        'ENGINE': 'django.db.backends.mysql',  # Use the appropriate database engine.
+        'NAME': 'uweresto',
+        'USER': 'uweresto',
+        'PASSWORD': 'Nfuu9UTrAR72',
+        'HOST': 's.dyzoon.dev',  # Usually 'localhost' or an IP address.
+        'PORT': '3306',  # Typically 3306 for MySQL.
     }
 }
+
 
 
 # Password validation
