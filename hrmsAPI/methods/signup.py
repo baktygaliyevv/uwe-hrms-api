@@ -19,7 +19,7 @@ def signup(request):
         if existing_user:
             return error('This user already exists')
         
-        new_user = User(phone=phone, password=hashed_password, salt=salt, role='client')
+        new_user = User(phone=phone, hash=hashed_password, salt=salt, role='client')
 
         session.add(new_user)
     
