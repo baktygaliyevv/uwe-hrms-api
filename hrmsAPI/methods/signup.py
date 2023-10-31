@@ -21,4 +21,4 @@ def signup(request):
 
         session.add(new_user)
     
-    return ok
+    return ok()
