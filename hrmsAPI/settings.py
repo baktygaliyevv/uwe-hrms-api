@@ -11,6 +11,14 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+import os
+
+engine = create_engine(os.getenv('DATABASE_URL'))
+
+# Create a session factory
+Session = sessionmaker(bind=engine)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent
@@ -68,23 +76,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'hrmsAPI.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',  # Use the appropriate database engine.
-        'NAME': 'uweresto',
-        'USER': 'uweresto',
-        'PASSWORD': 'Nfuu9UTrAR72',
-        'HOST': 's.dyzoon.dev',  # Usually 'localhost' or an IP address.
-        'PORT': '3306',  # Typically 3306 for MySQL.
-    }
-}
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
