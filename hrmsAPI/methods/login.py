@@ -18,8 +18,8 @@ def login(request):
         
         # If no user or the passwords don't match
         if not user or user.hash != hashlib.sha1((password + user.salt).encode('utf-8')).hexdigest():
-            return error("Incorrect phone number or password.")
-
+            return error(code=401, message="Incorrect phone number or password.")
+        
         token = secrets.token_hex(32)
         expiration_duration = 60 # 60 days
         expiration_date = datetime.now() + timedelta(days=expiration_duration)
