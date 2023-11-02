@@ -15,3 +15,5 @@ class User(Base):
     hash = Column(String(40, 'utf8mb3_unicode_ci'))
     salt = Column(String(32, 'utf8mb3_unicode_ci'))
     role = Column(ENUM('admin', 'manager', 'chef', 'staff', 'courier', 'client'), nullable=False, server_default=text("'client'"))
+
+    tokens = relationship("UserToken", back_populates="user")
