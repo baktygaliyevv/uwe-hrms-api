@@ -1,5 +1,5 @@
 from datetime import datetime
-from settings import Session
+from ..settings import Session
 from ..entities.user_tokens import UserToken
 from ..utils.responses import error
 
