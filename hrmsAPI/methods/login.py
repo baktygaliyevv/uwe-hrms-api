@@ -1,7 +1,7 @@
 from ..entities.user import User
 from ..entities.user_tokens import UserToken
 import json
-from settings import Session
+from ..settings import Session
 from ..utils.responses import error, ok
 import hashlib
 import secrets
