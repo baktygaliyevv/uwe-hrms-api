@@ -8,8 +8,18 @@ class TokenMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        # List of paths that should skip the token check
+        open_paths = [
+            '/api/schema/',  
+            '/api/schema/swagger-ui/',  
+            '/api/schema/redoc/',  
+            '/ping/',
+        ]
 
-        token = request.COOKIES.get('token') # проверка токена перед обработкой запроса
+        if request.path in open_paths:
+            return self.get_response(request)
+
+        token = request.COOKIES.get('token')
         if not token:
             return error(code=401, message="Token is missing")
 
