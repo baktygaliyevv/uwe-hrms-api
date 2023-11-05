@@ -1,7 +1,7 @@
 from ..entities.user import User
 from ..entities.user_tokens import UserToken
 import json
-from settings import Session
+from ..settings import Session
 from ..utils.responses import error, ok
 import hashlib
 import secrets
@@ -18,7 +18,7 @@ def login(request):
         
         # If no user or the passwords don't match
         if not user or user.hash != hashlib.sha1((password + user.salt).encode('utf-8')).hexdigest():
-            return error("Incorrect phone number or password.")
+            return error(code=401, message="Incorrect phone number or password.")
 
         token = secrets.token_hex(32)
         expiration_duration = 60 # 60 days
