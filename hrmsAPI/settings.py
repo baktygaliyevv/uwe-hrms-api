@@ -27,14 +27,11 @@ BASE_DIR = Path(__file__).resolve().parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!!njv@z24gk!hlarpn7dm86=g+fgano1-omn3*!)mgy9rf=@)e'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == '1'
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['.localhost', '.dyzoon.dev', '.0.0.0.0']
 
 # Application definition
 
