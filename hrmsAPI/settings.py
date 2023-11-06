@@ -56,7 +56,8 @@ REST_FRAMEWORK = {
 SPECTACULAR_SETTINGS = {
     'TITLE': 'hrmsAPI',
     'DESCRIPTION': 'Our api description, dont know what to write here',
-    'VERSION': '1.0.0'
+    'VERSION': '1.0.0',
+    'SCHEMA_PATH_PREFIX': os.getenv('BASE_URL'),
 }
 
 MIDDLEWARE = [
