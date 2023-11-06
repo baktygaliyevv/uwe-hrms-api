@@ -10,9 +10,9 @@ class TokenMiddleware:
     def __call__(self, request):
         # List of paths that should skip the token check
         open_paths = [
-            '/api/schema/',  
-            '/api/schema/swagger-ui/',  
-            '/api/schema/redoc/',  
+            '/schema/',  
+            '/schema/swagger-ui/',  
+            '/schema/redoc/',  
             '/ping/',
         ]
 

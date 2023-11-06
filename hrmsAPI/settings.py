@@ -64,7 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'hrmsAPI.middleware.middleware.TokenMiddleware'
+    'hrmsAPI.middleware.middleware.TokenMiddleware'
     ]
 
 ROOT_URLCONF = 'hrmsAPI.urls'
