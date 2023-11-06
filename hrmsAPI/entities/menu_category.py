@@ -10,4 +10,4 @@ class MenuCategory(Base):
     __tablename__ = 'menu_categories'
 
     id = Column(Integer, primary_key=True)
-    name = Column(Integer, nullable=False)
+    name = Column(Text, nullable=False)
