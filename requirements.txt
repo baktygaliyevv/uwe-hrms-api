@@ -2,3 +2,4 @@ django
 sqlalchemy
 drf-spectacular
 python-dotenv
+mysqlclient
