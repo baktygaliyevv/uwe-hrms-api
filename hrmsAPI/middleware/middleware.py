@@ -10,13 +10,13 @@ class TokenMiddleware:
     def __call__(self, request):
         # List of paths that should skip the token check
         open_paths = [
-            '/schema/',  
-            '/schema/swagger-ui/',  
-            '/schema/redoc/',  
-            '/ping/',
+            '/schema',  
+            '/schema/swagger-ui',  
+            '/schema/redoc',  
+            '/ping',
         ]
 
-        if request.path in open_paths:
+        if request.path.rstrip('/') in open_paths:
             return self.get_response(request)
 
         token = request.COOKIES.get('token')
