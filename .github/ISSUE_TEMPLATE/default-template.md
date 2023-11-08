@@ -14,7 +14,7 @@ assignees: ''
 
 ### Request
 <!-- Describe what will be required from the user to perform a request -->
-**Url:** `/v1/example`
+**Url:** `/example`
 
 ### Response 
 <!-- Describe what will user get after method is executed -->
@@ -24,5 +24,11 @@ assignees: ''
    "response": {
       
    }
+}
+```
+```json
+{
+   "status": "Error",
+   "message": ""
 }
 ```
