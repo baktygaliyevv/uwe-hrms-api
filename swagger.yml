@@ -1,0 +1,1788 @@
+
+openapi: 3.0.3
+info:
+  title: UWE HRMS API
+  description: nothing here
+  version: 1.0.0
+servers:
+  - url: https://uwe.dyzoon.dev/api/v1
+  
+tags:
+  - name: auth
+    description: Auth
+  - name: users
+    description: Users
+  - name: restaurants
+    description: Restaurants
+  - name: tables
+    description: Tables
+  - name: products
+    description: Products
+  - name: menu
+    description: Menu
+  - name: orders
+    description: Orders
+  - name: deliveries
+    description: Deliveries
+  - name: promocodes
+    description: Promocodes
+    
+paths:
+  /auth:
+    get:
+      tags:
+        - auth
+      summary: Check user's token
+      operationId: authGet
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        $ref: '#/components/schemas/User'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Login
+      operationId: authLoginPost
+      requestBody:
+        description: Login data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginPost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        $ref: '#/components/schemas/User'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+  /auth/signup:
+    post:
+      tags:
+        - auth
+      summary: Signup as client
+      operationId: authSignupPost
+      requestBody:
+        description: Signup data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginPost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericOk'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get all users
+      operationId: usersGet
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+    post:
+      tags:
+        - users
+      summary: Add user
+      operationId: usersPost
+      security:
+        - sessionAuth: []
+      requestBody:
+        description: User
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        $ref: '#/components/schemas/User'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+  /users/{id}:
+    patch:
+      tags:
+        - users
+      summary: Edit user
+      operationId: usersIdPatch
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      requestBody:
+        description: User
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPatch'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        $ref: '#/components/schemas/User'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+          
+    delete:
+      tags:
+        - users
+      summary: Delete user
+      operationId: usersIdDelete
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GenericOk'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+          
+  /restaurants:
+    get:
+      tags:
+        - restaurants
+      summary: Get restaurants
+      operationId: restaurantsGet
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Restaurant'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+  /restaurants/{id}:
+    delete:
+      tags:
+        - restaurants
+      summary: Delete restaurant
+      operationId: restaurantDelete
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/restaurantId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GenericOk'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+          
+  /products:
+    get:
+      tags:
+        - products
+      summary: Get all products
+      operationId: productsGet
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Product'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+    post:
+      tags:
+        - products
+      summary: Add product
+      operationId: productsPost
+      security:
+        - sessionAuth: []
+      requestBody:
+        description: Product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductPost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        $ref: '#/components/schemas/Product'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+  /products/{id}:
+    patch:
+      tags:
+        - products
+      summary: Edit products
+      operationId: productsIdPatch
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/productId'
+      requestBody:
+        description: Product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductPatch'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        $ref: '#/components/schemas/Product'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+          
+    delete:
+      tags:
+        - products
+      summary: Delete product
+      operationId: productIdDelete
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/productId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GenericOk'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+          
+  /tables:
+    get:
+      tags:
+        - tables
+      summary: Get all tables
+      operationId: tablesGet
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Table'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+    post:
+      tags:
+        - tables
+      summary: Add table
+      operationId: tablesPost
+      security:
+        - sessionAuth: []
+      requestBody:
+        description: Table
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TablePost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        $ref: '#/components/schemas/Table'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+  /tables/{id}:
+    patch:
+      tags:
+        - tables
+      summary: Edit tables
+      operationId: tablesIdPatch
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/tableId'
+      requestBody:
+        description: Table
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TablePatch'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        $ref: '#/components/schemas/Table'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+          
+    delete:
+      tags:
+        - tables
+      summary: Delete table
+      operationId: tableIdDelete
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/tableId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GenericOk'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+          
+  /menu:
+    get:
+      tags:
+        - menu
+      summary: Get all menu items
+      operationId: menuGet
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties: 
+                      payload:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Menu'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+    
+    post:
+      tags:
+        - menu
+      summary: Add menu item
+      operationId: menuPost
+      security:
+        - sessionAuth: []
+      requestBody:
+        description: Menu
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuPost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties: 
+                      payload:
+                        type: array
+                        items: 
+                          $ref: '#/components/schemas/Menu'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'      
+  
+  /menu/{id}:
+    patch:
+      tags:
+        - menu
+      summary: Edit menu item
+      operationId: menuIdPatch
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/menuId'
+      requestBody:
+        description: Menu
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuPatch'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties: 
+                      payload:
+                        type: array
+                        items: 
+                          $ref: '#/components/schemas/Menu'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+  
+    delete:
+      tags:
+        - menu
+      summary: Delete menu item
+      operationId: menuIdDelete
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/menuId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericOk'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+    
+  /menu/{id}/products:
+    post:
+      tags:
+        - menu
+      summary: Add menu item product
+      operationId: menuIdProductsPost
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/menuId'
+      requestBody:
+        description: Menu
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuProductPost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                  allOf:
+                    - $ref: '#/components/schemas/GenericOk'
+                    - type: object
+                      properties:
+                        payload:
+                          $ref: '#/components/schemas/MenuProduct'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+                          
+  /menu/{id}/products/{productId}:
+    delete:
+      tags: 
+        - menu
+      summary: Delete menu item product
+      operationId: menuProductsDelete
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/menuId'
+        - $ref: '#/components/parameters/menuProductId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericOk'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+  
+  /menu/categories:
+    get:
+      tags:
+        - menu
+      summary: Get menu categories
+      operationId: menuCategoriesGet
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties: 
+                      payload:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/MenuCategory'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+    post:
+      tags:
+        - menu
+      summary: Add menu category
+      operationId: menuCategoriesPost
+      security:
+        - sessionAuth: []
+      requestBody:
+        description: Menu category
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuCategoryPost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties: 
+                      payload:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/MenuCategory'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+  /orders:
+    get:
+      tags:
+        - orders
+      summary: Get all orders
+      operationId: ordersGet
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties: 
+                      payload:
+                        type: array
+                        items: 
+                          $ref: '#/components/schemas/Order'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+    post:
+      tags:
+        - orders
+      summary: Add order
+      operationId: ordersPost
+      security:
+        - sessionAuth: []
+      requestBody:
+        description: Order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderPost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties: 
+                      payload:
+                        $ref: '#/components/schemas/Order'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+    
+  /orders/{id}:
+    patch:
+      tags: 
+        - orders
+      summary: Edit order
+      operationId: ordersIdPatch
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/orderId'
+      requestBody:
+        description: Order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderPatch'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties: 
+                      payload:
+                        $ref: '#/components/schemas/Order'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+          
+    delete:
+      tags:
+        - orders
+      summary: Delete order
+      operationId: ordersIdDelete
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/orderId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GenericOk'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+      
+  
+  /orders/{id}/items:
+    post:
+      tags:
+        - orders
+      summary: Add item to the order
+      operationId: ordersIdItemsPost
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/orderId'
+      requestBody:
+        description: Order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItemPost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                  allOf:
+                    - $ref: '#/components/schemas/GenericOk'
+                    - type: object
+                      properties:
+                        payload:
+                          $ref: '#/components/schemas/OrderItem'
+                          
+  /orders/{id}/items/{itemId}:
+    patch:
+      tags:
+        - orders
+      summary: Edit item quantity
+      operationId: ordersIdItemsPatch
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/orderId'
+        - $ref: '#/components/parameters/orderItemId'
+      requestBody:
+        description: Order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItemPatch'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                  allOf:
+                    - $ref: '#/components/schemas/GenericOk'
+                    - type: object
+                      properties:
+                        payload:
+                          $ref: '#/components/schemas/OrderItem'
+    delete:
+      tags:
+        - orders
+      summary: Edit item quantity
+      operationId: ordersIdItemsDelete
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/orderId'
+        - $ref: '#/components/parameters/orderItemId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericOk'
+  
+  /deliveries:
+    get:
+      tags:
+        - deliveries
+      summary: Get all deliveries
+      operationId: deliveriesGet
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties: 
+                      payload:
+                        type: array
+                        items: 
+                          $ref: '#/components/schemas/Delivery'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+          
+    post:
+      tags:
+        - deliveries
+      summary: Add delivery
+      operationId: deliveriesPost
+      security:
+        - sessionAuth: []
+      requestBody:
+        description: Delivery
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryPost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties: 
+                      payload:
+                        $ref: '#/components/schemas/Delivery'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+    
+  /deliveries/{id}:
+    patch:
+      tags: 
+        - deliveries
+      summary: Edit delivery
+      operationId: deliveriesIdPatch
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/deliveryId'
+      requestBody:
+        description: Order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryPatch'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties: 
+                      payload:
+                        $ref: '#/components/schemas/Delivery'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+          
+    delete:
+      tags:
+        - deliveries
+      summary: Delete delivery
+      operationId: deliveriesIdDelete
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/deliveryId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GenericOk'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+      
+  
+  /deliveries/{id}/items:
+    post:
+      tags:
+        - deliveries
+      summary: Add item to the delivery
+      operationId: deliveriesIdItemsPost
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/deliveryId'
+      requestBody:
+        description: Order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryItemPost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                  allOf:
+                    - $ref: '#/components/schemas/GenericOk'
+                    - type: object
+                      properties:
+                        payload:
+                          $ref: '#/components/schemas/DeliveryItem'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+                          
+  /deliveries/{id}/items/{itemId}:
+    patch:
+      tags:
+        - deliveries
+      summary: Edit item quantity
+      operationId: deliveriesIdItemsPatch
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/deliveryId'
+        - $ref: '#/components/parameters/deliveryItemId'
+      requestBody:
+        description: Order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryItemPatch'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                  allOf:
+                    - $ref: '#/components/schemas/GenericOk'
+                    - type: object
+                      properties:
+                        payload:
+                          $ref: '#/components/schemas/DeliveryItem'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+    delete:
+      tags:
+        - deliveries
+      summary: Edit item quantity
+      operationId: deliveriesIdItemsDelete
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/deliveryId'
+        - $ref: '#/components/parameters/deliveryItemId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericOk'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+                
+  /promocodes:
+    get:
+      tags:
+        - promocodes
+      summary: Get all promocodes
+      operationId: promocodesGet
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Promocode'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+    post:
+      tags:
+        - promocodes
+      summary: Add promocode
+      operationId: promocodesPost
+      security:
+        - sessionAuth: []
+      requestBody:
+        description: Promocode
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Promocode'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties:
+                      payload:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Promocode'
+                    required:
+                      - payload
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+  /promocodes/{id}:
+    delete:
+      tags:
+        - promocodes
+      summary: Delete promocode
+      operationId: promocodesIdDelete
+      security:
+        - sessionAuth: []
+      parameters:
+        - $ref: '#/components/parameters/promocodeId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericOk'
+        '401':
+          $ref: '#/components/responses/GenericUnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/GenericNotFoundResponse'
+                
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: sessionId
+      
+  parameters:
+  
+    userId:
+      name: id
+      in: path
+      description: User id
+      required: true
+      schema:
+        type: integer
+        
+    restaurantId:
+      name: id
+      in: path
+      description: Restaurant id
+      required: true
+      schema:
+        type: integer
+        
+    productId:
+      name: id
+      in: path
+      description: Product id
+      required: true
+      schema:
+        type: integer
+        
+    tableId:
+      name: id
+      in: path
+      description: Table id
+      required: true
+      schema:
+        type: integer
+        
+    menuId:
+      name: id
+      in: path
+      description: Menu item id
+      required: true
+      schema:
+        type: integer
+        
+    menuProductId:
+      name: productId
+      in: path
+      description: Menu item id
+      required: true
+      schema:
+        type: integer
+      
+    orderId:
+      name: id
+      in: path
+      description: Order id
+      required: true
+      schema:
+        type: integer
+        
+    orderItemId:
+      name: itemId
+      in: path
+      description: Order item id
+      required: true
+      schema:
+        type: integer
+        
+    deliveryId:
+      name: id
+      in: path
+      description: Delivery id
+      required: true
+      schema:
+        type: integer
+        
+    deliveryItemId:
+      name: itemId
+      in: path
+      description: Delivery item id
+      required: true
+      schema:
+        type: integer
+        
+    promocodeId:
+      name: id
+      in: path
+      description: Promocode id
+      required: true
+      schema:
+        type: integer
+        
+  schemas:
+  
+    GenericOk:
+      type: object
+      properties: 
+        status:
+          type: string
+          enum:
+            - 'Ok'
+      required:
+        - status
+        
+    GenericUnauthorized:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - 'Error'
+        error:
+          type: string
+          enum:
+            - 'Authorization failed. Please see `payload` for more details.'
+      required:
+        - status
+        - error
+        
+    GenericNotFound:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - 'Error'
+        error:
+          type: string
+          enum:
+            - 'Not found.'
+      required:
+        - status
+        - error
+        
+    GenericInternalError:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - 'Error'
+        error:
+          type: string
+          enum:
+            - 'Something went terribly wrong, Check `payload` for more details. Contact me at hi@dyzoon.dev'
+      required:
+        - status
+        - error
+        
+    Role:
+      type: string
+      enum:
+        - admin
+        - manager
+        - chef
+        - staff
+        - courier
+        - client
+        
+    User:
+      type: object
+      properties:
+        id:
+          type: number
+        first_name:
+          type: string
+        last_name:
+          type: string
+        phone:
+          type: string
+        role:
+          $ref: '#/components/schemas/Role'
+          
+    UserPost:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        phone:
+          type: string
+        password:
+          type: string
+        role:
+          $ref: '#/components/schemas/Role'
+      required:
+        - first_name
+        - last_name
+        - phone
+        - password
+        - role
+        
+    UserPatch:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        phone:
+          type: string
+        password:
+          type: string
+        role:
+          $ref: '#/components/schemas/Role'
+          
+    LoginPost:
+      type: object
+      properties:
+        phone:
+          type: string
+        password:
+          type: string
+          
+    Restaurant:
+      type: object
+      properties: 
+        id:
+          type: number
+        city: 
+          type: string
+          
+    Product:
+      type: object
+      properties: 
+        id: 
+          type: number
+        name:
+          type: string
+        vegan: 
+          type: boolean
+        vegeterian: 
+          type: boolean
+        gluten_free: 
+          type: boolean
+          
+    ProductPost:
+      type: object
+      properties: 
+        name:
+          type: string
+        vegan: 
+          type: boolean
+        vegeterian: 
+          type: boolean
+        gluten_free: 
+          type: boolean
+      required: 
+        - name
+        - vegan
+        - vegeterian
+        - gluten_free
+        
+    ProductPatch:
+      type: object
+      properties: 
+        name:
+          type: string
+        vegan: 
+          type: boolean
+        vegeterian: 
+          type: boolean
+        gluten_free: 
+          type: boolean
+          
+    Table:
+      type: object
+      properties: 
+        id: 
+          type: number
+        restaurant: 
+          $ref: '#/components/schemas/Restaurant'
+        capacity:
+          type: number
+          
+    TablePost:
+      type: object
+      properties: 
+        restaurant_id: 
+          type: number
+        capacity:
+          type: number
+      required: 
+        - restaurant_id
+        - capacity
+        
+    TablePatch:
+      type: object
+      properties: 
+        restaurant_id: 
+          type: number
+        capacity:
+          type: number
+          
+    Menu:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        category:
+          $ref: '#/components/schemas/MenuCategory' 
+        price:
+          type: number
+        products:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Product' 
+    
+    MenuPost:
+      type: object
+      properties:
+        name:
+          type: string
+        category_id:
+          type: number
+        price:
+          type: number
+        products: 
+          type: array
+          items:
+            type: number
+      required:
+        - name
+        - category_id
+        - price 
+        - products
+      
+    MenuPatch:
+      type: object
+      properties:
+        name:
+          type: string
+        category_id:
+          type: number
+        price:
+          type: number
+          
+    MenuProduct:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+          
+    MenuProductPost:
+      type: object
+      properties:
+        product_id:
+          type: number
+      required:
+        - product_id
+
+    MenuCategory:
+      type: object
+      properties:
+        id:
+          type: number
+        name: 
+          type: string
+          
+    MenuCategoryPost:
+      type: object
+      properties:
+        name: 
+          type: string
+          
+    OrderItem:
+      type: object
+      properties: 
+        item:
+          $ref: '#/components/schemas/Menu'
+        quantity:
+          type: number
+      
+    OrderItemPost:
+      type: object
+      properties: 
+        item_id:
+          type: number
+        quantity:
+          type: number
+      required:
+        - item_id
+        - quantity
+          
+    OrderItemPatch:
+      type: object
+      properties: 
+        quantity:
+          type: number
+      required:
+        - quantity
+          
+    Order:
+      type: object
+      properties:
+        id:
+          type: number
+        user:
+          $ref: '#/components/schemas/User'
+        table:
+          $ref: '#/components/schemas/Table'
+        promocode:
+          $ref: '#/components/schemas/Promocode'
+        created_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+        items: 
+          type: array
+          items: 
+            $ref: '#/components/schemas/OrderItem'
+      
+    OrderPost:
+      type: object
+      properties:
+        user_id:
+          type: number
+        table_id:
+          type: number
+        promocode_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+        items: 
+          type: array
+          items: 
+            $ref: '#/components/schemas/OrderItemPost'
+      required:
+        - user_id
+        - table_id
+        - promocode_id
+        - created_at
+        - completed_at
+        - items
+    
+    OrderPatch:
+      type: object
+      properties:
+        user_id:
+          type: number
+        table_id:
+          type: number
+        promocode_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+    
+    DeliveryItem:
+      type: object
+      properties: 
+        item:
+          $ref: '#/components/schemas/Menu'
+        quantity:
+          type: number
+      
+    DeliveryItemPost:
+      type: object
+      properties: 
+        item_id:
+          type: number
+        quantity:
+          type: number
+      required:
+        - item_id
+        - quantity
+          
+    DeliveryItemPatch:
+      type: object
+      properties: 
+        quantity:
+          type: number
+      required:
+        - quantity
+        
+    DeliveryStatus:
+      type: string
+      enum:
+        - new
+        - delivering
+        - complete
+          
+    Delivery:
+      type: object
+      properties:
+        id:
+          type: number
+        user:
+          $ref: '#/components/schemas/User'
+        restaurant:
+          $ref: '#/components/schemas/Restaurant'
+        promocode:
+          $ref: '#/components/schemas/Promocode'
+        address:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/DeliveryStatus'
+        items: 
+          type: array
+          items: 
+            $ref: '#/components/schemas/DeliveryItem'
+      
+    DeliveryPost:
+      type: object
+      properties:
+        user_id:
+          type: number
+        restaurant_id:
+          type: number
+        promocode_id:
+          type: string
+        items: 
+          type: array
+          items: 
+            $ref: '#/components/schemas/DeliveryItemPost'
+      required:
+        - user_id
+        - restaurant_id
+        - promocode_id
+        - items
+    
+    DeliveryPatch:
+      type: object
+      properties:
+        user_id:
+          type: number
+        restaurant_id:
+          type: number
+        promocode_id:
+          type: string
+        status:
+          $ref: '#/components/schemas/DeliveryStatus'
+          
+    Promocode:
+      type: object
+      properties:
+        id:
+          type: string
+        discount:
+          type: number
+        valid_till:
+          type: string
+          format: date-time
+      required:
+        - id
+        - discount
+        - valid_till
+  
+  responses:
+  
+    GenericOkResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericOk'
+            
+    GenericUnauthorizedResponse:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericUnauthorized'
+            
+    GenericNotFoundResponse:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericNotFound'
