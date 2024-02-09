@@ -1,4 +1,3 @@
-
 openapi: 3.0.3
 info:
   title: UWE HRMS API
@@ -895,6 +894,8 @@ paths:
                       properties:
                         payload:
                           $ref: '#/components/schemas/OrderItem'
+                      required:
+                        - payload
     delete:
       tags:
         - orders
@@ -1055,6 +1056,8 @@ paths:
                       properties:
                         payload:
                           $ref: '#/components/schemas/DeliveryItem'
+                      required:
+                        - payload
         '401':
           $ref: '#/components/responses/GenericUnauthorizedResponse'
         '404':
@@ -1089,6 +1092,8 @@ paths:
                       properties:
                         payload:
                           $ref: '#/components/schemas/DeliveryItem'
+                      required:
+                        - payload
         '401':
           $ref: '#/components/responses/GenericUnauthorizedResponse'
         '404':
@@ -1371,6 +1376,12 @@ components:
           type: string
         role:
           $ref: '#/components/schemas/Role'
+      required:
+        - id
+        - first_name
+        - last_name
+        - phone
+        - role
           
     UserPost:
       type: object
@@ -1413,6 +1424,9 @@ components:
           type: string
         password:
           type: string
+      required:
+        - phone
+        - password
           
     Restaurant:
       type: object
@@ -1421,6 +1435,9 @@ components:
           type: number
         city: 
           type: string
+      required:
+        - id
+        - city
           
     Product:
       type: object
@@ -1435,6 +1452,12 @@ components:
           type: boolean
         gluten_free: 
           type: boolean
+      required:
+        - id
+        - name
+        - vegan
+        - vegetarian
+        - gluten_free
           
     ProductPost:
       type: object
@@ -1474,6 +1497,10 @@ components:
           $ref: '#/components/schemas/Restaurant'
         capacity:
           type: number
+      required:
+        - id
+        - restaurant
+        - capacity
           
     TablePost:
       type: object
@@ -1509,6 +1536,12 @@ components:
           type: array
           items: 
             $ref: '#/components/schemas/Product' 
+      required:
+        - id
+        - name
+        - category
+        - price
+        - products
     
     MenuPost:
       type: object
@@ -1546,6 +1579,9 @@ components:
           type: number
         name:
           type: string
+      required:
+        - id
+        - name
           
     MenuProductPost:
       type: object
@@ -1562,12 +1598,17 @@ components:
           type: number
         name: 
           type: string
+      required:
+        - id
+        - name
           
     MenuCategoryPost:
       type: object
       properties:
         name: 
           type: string
+      required:
+        - name
           
     OrderItem:
       type: object
@@ -1576,6 +1617,9 @@ components:
           $ref: '#/components/schemas/Menu'
         quantity:
           type: number
+      required:
+        - item
+        - quantity
       
     OrderItemPost:
       type: object
@@ -1602,21 +1646,35 @@ components:
         id:
           type: number
         user:
-          $ref: '#/components/schemas/User'
+          oneOf:
+            - $ref: '#/components/schemas/User'
+            - type: 'null'
         table:
           $ref: '#/components/schemas/Table'
         promocode:
-          $ref: '#/components/schemas/Promocode'
+          oneOf:
+            - $ref: '#/components/schemas/Promocode'
+            - type: 'null'
         created_at:
           type: string
           format: date-time
         completed_at:
-          type: string
-          format: date-time
+          oneOf:
+            - type: string
+              format: date-time
+            - type: 'null'
         items: 
           type: array
           items: 
             $ref: '#/components/schemas/OrderItem'
+      required:
+        - id
+        - user
+        - table
+        - promocode
+        - created_at
+        - completed_at
+        - items
       
     OrderPost:
       type: object
@@ -1627,12 +1685,6 @@ components:
           type: number
         promocode_id:
           type: string
-        created_at:
-          type: string
-          format: date-time
-        completed_at:
-          type: string
-          format: date-time
         items: 
           type: array
           items: 
@@ -1641,8 +1693,6 @@ components:
         - user_id
         - table_id
         - promocode_id
-        - created_at
-        - completed_at
         - items
     
     OrderPatch:
@@ -1654,9 +1704,6 @@ components:
           type: number
         promocode_id:
           type: string
-        created_at:
-          type: string
-          format: date-time
         completed_at:
           type: string
           format: date-time
@@ -1668,6 +1715,9 @@ components:
           $ref: '#/components/schemas/Menu'
         quantity:
           type: number
+      required:
+        - item
+        - quantity
       
     DeliveryItemPost:
       type: object
@@ -1705,7 +1755,9 @@ components:
         restaurant:
           $ref: '#/components/schemas/Restaurant'
         promocode:
-          $ref: '#/components/schemas/Promocode'
+          oneOf:
+            - $ref: '#/components/schemas/Promocode'
+            - type: 'null'
         address:
           type: string
         created_at:
@@ -1717,6 +1769,15 @@ components:
           type: array
           items: 
             $ref: '#/components/schemas/DeliveryItem'
+      required:
+        - id
+        - user
+        - restaurant
+        - promocode
+        - address
+        - created_at
+        - status
+        - items
       
     DeliveryPost:
       type: object
