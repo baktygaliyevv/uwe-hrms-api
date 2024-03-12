@@ -6,9 +6,11 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 metadata = Base.metadata
 
-t_menu_products = Table(
-    'menu_products', metadata,
-    Column('menu_id', ForeignKey('menu.id'), nullable=False, index=True),
-    Column('product_id', ForeignKey('products.id'), nullable=False, index=True)
-)
+class EmailCode(Base):
+    __tablename__ = 'email_codes'
 
+    code = Column(String(32, 'utf8mb3_unicode_ci'), primary_key=True)
+    user_id = Column(ForeignKey('users.id'), nullable=False, index=True)
+    expiration_date = Column(DateTime, nullable=False)
+
+    user = relationship('User')

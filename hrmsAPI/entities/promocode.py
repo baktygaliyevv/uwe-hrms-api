@@ -10,6 +10,6 @@ metadata = Base.metadata
 class Promocode(Base):
     __tablename__ = 'promocodes'
 
-    id = Column(String(50, 'utf8mb3_unicode_ci'), primary_key=True)
+    id = Column(VARCHAR(50), primary_key=True)
     discount = Column(Integer, nullable=False)
     valid_till = Column(DateTime, nullable=False)

@@ -1,5 +1,5 @@
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text, text
-from sqlalchemy.dialects.mysql import ENUM, TINYINT, VARCHAR
+from sqlalchemy.dialects.mysql import ENUM, TINYINT, VARCHAR, TEXT
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -10,10 +10,10 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(100, 'utf8mb3_unicode_ci'), nullable=False)
-    phone = Column(VARCHAR(10), nullable=False)
-    hash = Column(String(40, 'utf8mb3_unicode_ci'))
-    salt = Column(String(32, 'utf8mb3_unicode_ci'))
+    first_name = Column(TEXT, nullable=False)
+    last_name = Column(TEXT, nullable=False)
+    email = Column(TEXT, nullable=False)
+    hash = Column(VARCHAR(64))
+    salt = Column(VARCHAR(32))
     role = Column(ENUM('admin', 'manager', 'chef', 'staff', 'courier', 'client'), nullable=False, server_default=text("'client'"))
-
-    tokens = relationship("UserToken", back_populates="user")
+    verified = Column(TINYINT(1), nullable=False, server_default=text("'0'"))

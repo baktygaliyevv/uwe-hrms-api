@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponse
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-
+from methods.menu.get_menu_items import get_menu_items
+from methods.menu.get_menu_categories import get_menu_categories
 def ping_view(request):
     return HttpResponse("pong", status=200)
 
@@ -28,4 +29,6 @@ urlpatterns = [
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('menu/', get_menu_items, name='get_menu_items'),
+    path('menu/categories', get_menu_categories, name='get_manu_categories'),
 ]
