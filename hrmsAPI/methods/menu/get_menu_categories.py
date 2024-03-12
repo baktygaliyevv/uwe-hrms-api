@@ -14,7 +14,7 @@ def get_menu_categories(request):
                 "name": category.name
             } for category in categories]
 
-            return ok({"payload": categories_data})
+            return ok(categories_data)
 
         except Exception as e:
             return error(code=500, message=str(e))
