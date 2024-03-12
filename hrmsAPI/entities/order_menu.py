@@ -10,7 +10,7 @@ class OrderMenu(Base):
     __tablename__ = 'order_menu'
 
     id = Column(Integer, primary_key=True)
-    order_id = Column(ForeignKey('orders.id'), nullable=False, index=True)
+    order_id = Column(ForeignKey('orders.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
     menu_id = Column(ForeignKey('menu.id'), nullable=False, index=True)
     quantity = Column(Integer, nullable=False)
 
