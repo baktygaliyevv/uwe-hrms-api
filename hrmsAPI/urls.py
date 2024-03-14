@@ -22,7 +22,7 @@ from .methods.menu.get_menu_items import get_menu_items
 from .methods.menu.get_menu_categories import get_menu_categories
 from .methods.users.get_all_users import get_all_users
 from .methods.users.add_user import add_user
-from .methods.orders.get_orders import get_otders
+from .methods.orders.get_orders import get_orders
 
 def ping_view(request):
     return HttpResponse("pong", status=200)
