@@ -1,8 +1,8 @@
-from ..entities.menu import Menu
-from ..entities.menu_category import MenuCategory
-from ..entities.product import Product
-from ..settings import Session
-from ..utils.responses import error, ok
+from ...entities.menu import Menu
+from ...entities.menu_category import MenuCategory
+from ...entities.product import Product
+from ...settings import Session
+from ...utils.responses import error, ok
 
 def get_menu_items(request):
     if request.method != 'GET':

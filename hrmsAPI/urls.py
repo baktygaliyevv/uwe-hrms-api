@@ -18,9 +18,12 @@ from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponse
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-from methods.menu.get_menu_items import get_menu_items
-from methods.menu.get_menu_categories import get_menu_categories
-from methods.orders.get_orders import get_orders
+from .methods.menu.get_menu_items import get_menu_items
+from .methods.menu.get_menu_categories import get_menu_categories
+from .methods.users.get_all_users import get_all_users
+from .methods.users.add_user import add_user
+from .methods.orders.get_orders import get_otders
+
 def ping_view(request):
     return HttpResponse("pong", status=200)
 
@@ -33,4 +36,6 @@ urlpatterns = [
     path('menu/', get_menu_items, name='get_menu_items'),
     path('menu/categories', get_menu_categories, name='get_menu_categories'),
     path('orders/', get_orders, name='get_orders'),
+    path('users/', get_all_users, name='get_all_users'),
+    path('users/', add_user, name='add_user')
 ]
