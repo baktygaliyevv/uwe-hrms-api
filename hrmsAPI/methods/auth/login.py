@@ -1,8 +1,8 @@
-from ..entities.user import User
-from ..entities.user_tokens import UserToken
+from ...entities.user import User
+from ...entities.user_tokens import UserToken
 import json
-from ..settings import Session
-from ..utils.responses import error, ok
+from ...settings import Session
+from ...utils.responses import error, ok
 import hashlib
 import secrets
 from datetime import datetime, timedelta
@@ -17,7 +17,7 @@ def login(request):
         user = session.query(User).filter_by(phone=phone).first()
         
         # If no user or the passwords don't match
-        if not user or user.hash != hashlib.sha1((password + user.salt).encode('utf-8')).hexdigest():
+        if not user or user.hash != hashlib.sha256((password + user.salt).encode('utf-8')).hexdigest():
             return error(code=401, message="Incorrect phone number or password.")
 
         token = secrets.token_hex(32)
