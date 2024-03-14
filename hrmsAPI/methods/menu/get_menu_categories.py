@@ -1,6 +1,6 @@
-from ..entities.menu_category import MenuCategory
-from ..settings import Session
-from ..utils.responses import error, ok
+from ...entities.menu_category import MenuCategory
+from ...settings import Session
+from ...utils.responses import error, ok
 
 def get_menu_categories(request):
     if request.method != 'GET':

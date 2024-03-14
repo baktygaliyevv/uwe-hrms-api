@@ -1,7 +1,7 @@
-from ..entities.user import User
+from ...entities.user import User
 import json
-from ..settings import Session
-from ..utils.responses import error, ok
+from ...settings import Session
+from ...utils.responses import error, ok
 import hashlib
 import secrets 
 
@@ -11,7 +11,7 @@ def signup(request):
     password = data.get("password")
 
     salt = secrets.token_hex(16)
-    hashed_password = hashlib.sha1((password + salt).encode('utf-8')).hexdigest()
+    hashed_password = hashlib.sha256((password + salt).encode('utf-8')).hexdigest()
 
     with Session() as session:
         # Check if the user already exists
@@ -24,3 +24,5 @@ def signup(request):
         session.add(new_user)
     
     return ok()
+
+# TODO верификация пользователей через имейл
