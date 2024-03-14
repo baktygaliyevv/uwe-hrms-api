@@ -62,7 +62,7 @@ def get_orders(request):
                     }
 
                     menu_products_ids=session.query(t_menu_products).filter_by(menu_id=item.id)
-                    products=session.query(Product).filter_by(id in [product_id.product_id for product_id in menu_products_ids])
+                    products=session.query(Product).filter(Product.id.in_([product_id.product_id for product_id in menu_products_ids]))
                     product_data=[{
                         "id": product.id,
                         "name": product.name,
