@@ -1,6 +1,16 @@
-from ..entities.order import Order
-from ..settings import Session
-from ..utils.responses import error, ok
+from ...entities.order import Order
+from ...entities.promocode import  Promocode
+from ...entities.table import Table
+from ...entities.restaurant import Restaurant
+from ...entities.user import User
+from ...entities.order_menu import OrderMenu
+from ...entities.menu import Menu
+from ...entities.menu_category import MenuCategory
+from ...entities.product import Product
+from ...entities.menu_product import t_menu_products
+
+from ...settings import Session
+from ...utils.responses import error, ok
 
 def get_orders(request):
     if request.method != 'GET':
@@ -11,67 +21,63 @@ def get_orders(request):
             orders = session.query(Order).all()
             payload = []
             for order in orders:
-                promocodes = session.query(Promocode).filter_by(id==order.promocode_id)
-                promocode_data = [{
+                promocode = session.query(Promocode).get(order.promocode_id)
+                promocode_data = {
                     "id": promocode.id,
                     "discount": promocode.discount,
                     "valid_till":promocode.valid_till
-                } for promocode in promocodes]   
+                }   
 
-                tables = session.query(Table).filter_by(id==order.table_id)
-                table_data=[]
-                for table in tables:
-                    restaurants = session.query(Restaurant).filter_by(id==table.id)
-                    restaurant_data=[{
-                        "id": restaurant.id,
-                        "city": restaurant.city
-                    } for restaurant in restaurants]
-
-                    table_data.append({
-                        "id":table.id,
-                        "restaurant": restaurant_data,
-                        "capacity": table.capacity
-                    })
+                table = session.query(Table).get(order.table_id)
+                restaurant = session.query(Restaurant).get(table.restaurant_id)
+                restaurant_data={
+                    "id": restaurant.id,
+                    "city": restaurant.city
+                }
+                table_data={
+                    "id":table.id,
+                    "restaurant": restaurant_data,
+                    "capacity": table.capacity
+                }
                 
-                users = session.query(User).filter_by(id==order.user_id)
-                user_data=[{
+                user = session.query(User).get(order.user_id)
+                user_data={
                     "id": user.id,
                     "first_name": user.first_name,
                     "last_name": user.last_name,
                     "email": user.email,
                     "role": user.role
-                    } for user in users]
+                    }
 
-                order_items = session.query(OrderMenu).filter_by(id==order.id)
+                order_items = session.query(OrderMenu).filter_by(id=order.id)
                 order_item_data=[]
                 for order_item in order_items:
 
-                    items = session.query(Menu).filter_by(id==order_item.id)
-                    item_data = []
-                    for item in items:
+                    item = session.query(Menu).get(order_item.id)
 
-                        categories=session.query(MenuCategory).filter_by(id==item.menu_category_id)
-                        category_data=[{
-                            "id": category.id,
-                            "name": category.name
-                        } for category in categories]
+                    category = session.query(MenuCategory).get(item.menu_category_id)
+                    category_data={
+                        "id": category.id,
+                        "name": category.name
+                    }
 
-                        products=session.query(Product).filter_by(id==item.menu_id)
-                        product_data=[{
-                            "id": product.id,
-                            "name": product.name,
-                            "vegan": bool(product.vegan),
-                            "vegetarian": bool(product.vegetarian),
-                            "gluten_free": bool(product.gluten_free)
-                        } for product in products]
+                    menu_products_ids=session.query(t_menu_products).filter_by(menu_id=item.id)
+                    products=session.query(Product).filter_by(id in [product_id.product_id for product_id in menu_products_ids])
+                    product_data=[{
+                        "id": product.id,
+                        "name": product.name,
+                        "vegan": bool(product.vegan),
+                        "vegetarian": bool(product.vegetarian),
+                        "gluten_free": bool(product.gluten_free)
+                    } for product in products]
 
-                        item_data.append({
-                            "item": item.id,
-                            "name": item.name,
-                            "category": category_data,
-                            "price": item.price,
-                            "products": product_data
-                        })
+                    item_data={
+                        "item": item.id,
+                        "name": item.name,
+                        "category": category_data,
+                        "price": item.price,
+                        "products": product_data
+                    }
                     
 
                     order_item_data.append({
