@@ -13,17 +13,18 @@ def login(request):
     password = data.get("password")
 
     with Session() as session:
+
         user = session.query(User).filter_by(phone=phone).first()
-        
+
         if not user or user.hash != hashlib.sha256((password + user.salt).encode('utf-8')).hexdigest():
             return error(code=401, message="Incorrect phone number or password.")
 
-        # token = secrets.token_hex(32)
-        # expiration_duration = 60 # 60 days
-        # expiration_date = datetime.now() + timedelta(days=expiration_duration)
+        token = secrets.token_hex(32)
+        expiration_duration = 60 # 60 days
+        expiration_date = datetime.now() + timedelta(days=expiration_duration)
 
-        # user_token = UserToken(user_id=user.id, token=token, expiration_date=expiration_date)
-        # session.add(user_token)
+        user_token = UserToken(user_id=user.id, token=token, expiration_date=expiration_date)
+        session.add(user_token)
 
         role_hierarchy = ['client', 'courier', 'staff', 'chef', 'manager', 'admin']
         user_roles = {role: False for role in role_hierarchy}
@@ -38,6 +39,6 @@ def login(request):
             "role": user_roles
         })
 
-        # response.set_cookie(key="token", value=token, expiration_date=expiration_date)
+        response.set_cookie(key="token", value=token, expiration_date=expiration_date)
 
         return response

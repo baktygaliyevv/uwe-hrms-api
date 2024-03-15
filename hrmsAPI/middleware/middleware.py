@@ -14,6 +14,8 @@ class TokenMiddleware:
             '/schema/swagger-ui',  
             '/schema/redoc',  
             '/ping',
+            '/login',
+            '/signup',
         ]
 
         if request.path.rstrip('/') in open_paths:
