@@ -3,3 +3,4 @@ sqlalchemy
 drf-spectacular
 python-dotenv
 mysqlclient
+djangorestframework

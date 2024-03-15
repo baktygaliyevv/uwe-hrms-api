@@ -14,7 +14,6 @@ def signup(request):
     hashed_password = hashlib.sha256((password + salt).encode('utf-8')).hexdigest()
 
     with Session() as session:
-        # Check if the user already exists
         existing_user = session.query(User).filter_by(phone=phone).first()
         if existing_user:
             return error('This user already exists')
