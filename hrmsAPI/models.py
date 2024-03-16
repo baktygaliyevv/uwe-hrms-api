@@ -164,7 +164,7 @@ class Users(models.Model):
     first_name = models.TextField()
     last_name = models.TextField()
     email = models.TextField()
-    hash = models.CharField(max_length=64, blank=True, null=True)
+    hash = models.CharField(max_length=128, blank=True, null=True)
     salt = models.CharField(max_length=32, blank=True, null=True)
     role = models.CharField(max_length=7)
     verified = models.IntegerField()

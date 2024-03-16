@@ -1,5 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.generics import RetrieveUpdateAPIView, DestroyAPIView
 from .serializers import UserSerializer
 from ...models import Users
 
@@ -18,3 +19,13 @@ class AddUser(generics.CreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+class EditUser(RetrieveUpdateAPIView):
+    queryset = Users.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'id'
+
+class DeleteUser(DestroyAPIView):
+    queryset = Users.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'id'
