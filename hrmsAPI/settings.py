@@ -11,14 +11,14 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 import os
+import environ
 
-engine = create_engine(os.getenv('DATABASE_URL'))
+env = environ.Env(
+    DEBUG = (bool, False)
+)
 
-# Create a session factory
-Session = sessionmaker(bind=engine)
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent
@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG') == '1'
 
-ALLOWED_HOSTS = ['.localhost', '.dyzoon.dev', '.0.0.0.0']
+ALLOWED_HOSTS = ['.localhost', '.dyzoon.dev', '.0.0.0.0', '127.0.0.1']
 
 # Application definition
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_spectacular',
+    'hrmsAPI'
 ]
 
 REST_FRAMEWORK = {
@@ -65,7 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'hrmsAPI.middleware.middleware.TokenMiddleware'
+    #'hrmsAPI.middleware.middleware.TokenMiddleware'
     ]
 
 ROOT_URLCONF = 'hrmsAPI.urls'
@@ -87,6 +88,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'hrmsAPI.wsgi.application'
+
+DATABASES = {
+    'default': env.db(),
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
