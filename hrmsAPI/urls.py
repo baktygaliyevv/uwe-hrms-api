@@ -22,6 +22,7 @@ from .methods.users.views import AddUser, GetAllUsers, EditUser, DeleteUser
 from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories
 from .methods.products.views import GetProducts, AddProduct, DeleteProduct, EditProduct
 from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode
+from .methods.tables.views import GetAddTable, EditDeleteTable
 
 def ping_view(request):
     return HttpResponse("pong", status=200)
@@ -59,4 +60,8 @@ urlpatterns = [
     path('promocodes/', GetAllPromocodes.as_view(), name='get-promocodes'),
     path('promocodes/add', AddPromocode.as_view(), name='add-promocode'),
     path('promocodes/<id>/', DeletePromocode.as_view(), name='delete-promocode'),
+
+    #tables
+    path('tables/', GetAddTable.as_view(), name='get-add-tables'),
+    path('tables/<int:id>', EditDeleteTable.as_view(), name='edit-delete-table')
 ]
