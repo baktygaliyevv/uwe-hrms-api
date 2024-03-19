@@ -8,7 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = ('id', 'first_name', 'last_name', 'email', 'role', 'verified')
-        extra_kwargs = {'hash': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = Users(
@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
             role=validated_data.get('role', 'client'),
             verified=validated_data.get('verified', False)
         )
-        password = validated_data.pop('hash', None)
+        password = validated_data.pop('password', None)
         if password:
             salt = secrets.token_hex(16)  # Generate a new salt
             user.salt = salt
