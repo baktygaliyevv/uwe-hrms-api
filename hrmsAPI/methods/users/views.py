@@ -5,8 +5,13 @@ from .serializers import UserSerializer
 from ...models import Users
 
 class GetAllUsers(generics.ListAPIView):
-    queryset = Users.objects.all()
-    serializer_class = UserSerializer
+    def get(self, request, *args, **kwargs):
+        queryset = Users.objects.all()
+        serializer_class = UserSerializer(queryset, many=True)
+        return Response({
+            'status': 'Ok',
+            'payload': serializer_class.data
+        })
 
 class AddUser(generics.CreateAPIView):
     queryset = Users.objects.all()
