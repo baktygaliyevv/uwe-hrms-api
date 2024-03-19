@@ -778,7 +778,34 @@ paths:
                       - payload
         '401':
           $ref: '#/components/responses/GenericUnauthorizedResponse'
-    
+  /orders/client:
+    post:
+      tags:
+        - orders
+      summary: Add order from client UI
+      operationId: ordersClientPost
+      security:
+        - sessionAuth: []
+      requestBody:
+        description: Order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderClientPost'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GenericOk'
+                  - type: object
+                    properties: 
+                      payload:
+                        $ref: '#/components/schemas/Order'
+                    required:
+                      - payload
   /orders/{id}:
     patch:
       tags: 
@@ -1372,7 +1399,7 @@ components:
           type: string
         last_name:
           type: string
-        phone:
+        email:
           type: string
         role:
           $ref: '#/components/schemas/Role'
@@ -1380,7 +1407,7 @@ components:
         - id
         - first_name
         - last_name
-        - phone
+        - email
         - role
           
     UserPost:
@@ -1390,7 +1417,7 @@ components:
           type: string
         last_name:
           type: string
-        phone:
+        email:
           type: string
         password:
           type: string
@@ -1399,7 +1426,7 @@ components:
       required:
         - first_name
         - last_name
-        - phone
+        - email
         - password
         - role
         
@@ -1410,7 +1437,7 @@ components:
           type: string
         last_name:
           type: string
-        phone:
+        email:
           type: string
         password:
           type: string
@@ -1420,12 +1447,12 @@ components:
     LoginPost:
       type: object
       properties:
-        phone:
+        email:
           type: string
         password:
           type: string
       required:
-        - phone
+        - email
         - password
           
     Restaurant:
@@ -1448,7 +1475,7 @@ components:
           type: string
         vegan: 
           type: boolean
-        vegeterian: 
+        vegetarian: 
           type: boolean
         gluten_free: 
           type: boolean
@@ -1466,14 +1493,14 @@ components:
           type: string
         vegan: 
           type: boolean
-        vegeterian: 
+        vegetarian: 
           type: boolean
         gluten_free: 
           type: boolean
       required: 
         - name
         - vegan
-        - vegeterian
+        - vegetarian
         - gluten_free
         
     ProductPatch:
@@ -1483,7 +1510,7 @@ components:
           type: string
         vegan: 
           type: boolean
-        vegeterian: 
+        vegetarian: 
           type: boolean
         gluten_free: 
           type: boolean
@@ -1646,23 +1673,22 @@ components:
         id:
           type: number
         user:
-          oneOf:
+          nullable: true
+          allOf:
             - $ref: '#/components/schemas/User'
-            - type: 'null'
         table:
           $ref: '#/components/schemas/Table'
         promocode:
-          oneOf:
+          nullable: true
+          allOf:
             - $ref: '#/components/schemas/Promocode'
-            - type: 'null'
         created_at:
           type: string
           format: date-time
         completed_at:
-          oneOf:
-            - type: string
-              format: date-time
-            - type: 'null'
+          type: string
+          format: date-time
+          nullable: true
         items: 
           type: array
           items: 
@@ -1675,12 +1701,10 @@ components:
         - created_at
         - completed_at
         - items
-      
-    OrderPost:
+    
+    OrderClientPost:
       type: object
       properties:
-        user_id:
-          type: number
         table_id:
           type: number
         promocode_id:
@@ -1690,10 +1714,19 @@ components:
           items: 
             $ref: '#/components/schemas/OrderItemPost'
       required:
-        - user_id
         - table_id
         - promocode_id
         - items
+    
+    OrderPost:
+      allOf:
+        - $ref: '#/components/schemas/OrderClientPost'
+        - type: object
+          properties:
+            user_id:
+              type: number
+          required:
+            - user_id
     
     OrderPatch:
       type: object
@@ -1755,9 +1788,9 @@ components:
         restaurant:
           $ref: '#/components/schemas/Restaurant'
         promocode:
-          oneOf:
+          nullable: true
+          allOf:
             - $ref: '#/components/schemas/Promocode'
-            - type: 'null'
         address:
           type: string
         created_at:
