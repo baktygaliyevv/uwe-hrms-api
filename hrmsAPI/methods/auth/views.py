@@ -7,7 +7,7 @@ from .serializers import UserSerializer, UserTokenSerializer
 import secrets
 from datetime import timedelta, datetime
 
-class IndexView(APIView):
+class AuthView(APIView):
     def get(self, request, *args, **kwargs):
         # FIXME that's gonna be a middleware
         if not 'token' in request.COOKIES:
@@ -23,7 +23,7 @@ class IndexView(APIView):
             return Response({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_401_UNAUTHORIZED)
 
 
-class LoginView(APIView):
+class AuthLoginView(APIView):
     def post(self, request, *args, **kwargs):
         email = request.data.get("email")
         password = request.data.get("password")
@@ -49,6 +49,6 @@ class LoginView(APIView):
         
         return response
 
-class SignupView(APIView):
+class AuthSignupView(APIView):
     ### signup
     pass

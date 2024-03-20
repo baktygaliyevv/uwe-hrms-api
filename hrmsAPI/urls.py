@@ -22,7 +22,7 @@ from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteM
 from .methods.products.views import GetProducts, AddProduct, DeleteProduct, EditProduct
 from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode
 from .methods.tables.views import GetAddTable, EditDeleteTable
-from .methods.auth.views import LoginView
+from .methods.auth.views import AuthView, AuthLoginView
 
 # FIXME that's not ok :(
 API_BASE_URL = 'api/v1/'
@@ -60,5 +60,6 @@ urlpatterns = [
     path(f'{API_BASE_URL}tables/<int:id>', EditDeleteTable.as_view(), name='edit-delete-table'),
 
     #auth
-    path(f'{API_BASE_URL}auth/login/', LoginView.as_view(), name='login'),
+    path(f'{API_BASE_URL}auth', AuthView.as_view(), name='auth'),
+    path(f'{API_BASE_URL}auth/login/', AuthLoginView.as_view(), name='auth-login'),
 ]
