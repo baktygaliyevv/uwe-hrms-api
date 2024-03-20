@@ -15,9 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.http import HttpResponse
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from rest_framework import routers
 from .methods.users.views import AddUser, GetAllUsers, EditUser, DeleteUser
 from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories
 from .methods.products.views import GetProducts, AddProduct, DeleteProduct, EditProduct
@@ -25,47 +25,48 @@ from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeleteProm
 from .methods.tables.views import GetAddTable, EditDeleteTable
 from .methods.auth.views import LoginView
 
-def ping_view(request):
-    return HttpResponse("pong", status=200)
+API_VERSION = '1'
 
-urlpatterns = [
-    path('', ping_view, name='ping'),
-    path('ping/', ping_view, name='ping'),
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-
-    #users
-    path('users/', GetAllUsers.as_view(), name='get-users'),
-    path('users/add', AddUser.as_view(), name='add-users'),
-    path('users/<int:id>/', EditUser.as_view(), name='edit-user'),
-    path('users/<int:id>/delete/', DeleteUser.as_view(), name='delete-user'),
+routes = [
+    # users
+    ('users/', GetAllUsers),
+    ('users/add', AddUser),
+    ('users/<int:id>/', EditUser),
+    ('users/<int:id>/delete/', DeleteUser),
 
     #menu
-    path('menu/', GetMenuItems.as_view(), name='get-menu-item'),
-    path('menu/add', AddMenuItem.as_view(), name='add-menu-item'),
-    path('menu/<int:id>/', EditMenuItem.as_view(), name='edit-menu-item'),
-    path('menu/<int:id>/', DeleteMenuItem.as_view(), name='delete-menu-item'),
-    path('menu/<int:id>/products/', AddMenuProduct.as_view(), name='add-menu-product'),
-    path('menu/<int:id>/products/<int:productId>/', DeleteMenuProduct.as_view(), name='delete-menu-product'),
-    path('menu/categories/', GetMenuCategories.as_view(), name='get-menu-categories'),
-    path('menu/categories/', AddMenuCategory.as_view(), name='add-menu-category'),
+    ('menu/', GetMenuItems),
+    ('menu/add', AddMenuItem),
+    ('menu/<int:id>/', EditMenuItem),
+    ('menu/<int:id>/', DeleteMenuItem),
+    ('menu/<int:id>/products/', AddMenuProduct),
+    ('menu/<int:id>/products/<int:productId>/', DeleteMenuProduct),
+    ('menu/categories/', GetMenuCategories),
+    ('menu/categories/', AddMenuCategory),
 
     #products
-    path('products/', GetProducts.as_view(), name='get-products'),
-    path('products/', AddProduct.as_view(), name='add-product'),
-    path('products/<int:id>/', EditProduct.as_view(), name='edit-product'),
-    path('products/<int:id>/', DeleteProduct.as_view(), name='delete-product'),
+    ('products/', GetProducts),
+    ('products/', AddProduct),
+    ('products/<int:id>/', EditProduct),
+    ('products/<int:id>/', DeleteProduct),
 
     #promocodes
-    path('promocodes/', GetAllPromocodes.as_view(), name='get-promocodes'),
-    path('promocodes/add', AddPromocode.as_view(), name='add-promocode'),
-    path('promocodes/<id>/', DeletePromocode.as_view(), name='delete-promocode'),
+    ('promocodes/', GetAllPromocodes),
+    ('promocodes/add', AddPromocode),
+    ('promocodes/<id>/', DeletePromocode),
 
     #tables
-    path('tables/', GetAddTable.as_view(), name='get-add-tables'),
-    path('tables/<int:id>', EditDeleteTable.as_view(), name='edit-delete-table'),
+    ('tables/', GetAddTable),
+    ('tables/<int:id>', EditDeleteTable),
 
     #auth
-    path('auth/login/', LoginView.as_view(), name='login'),
+    ('auth/login/', LoginView),
+]
+
+router = routers.DefaultRouter()
+for url, view in routes:
+    router.register(url, view.as_view())
+
+urlpatterns = [
+    path(f'api/v{API_VERSION}/', include(router.urls))
 ]
