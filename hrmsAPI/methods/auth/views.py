@@ -8,6 +8,22 @@ from .serializers import UserSerializer, UserTokenSerializer
 import secrets
 from datetime import timedelta, datetime
 
+class IndexView(APIView):
+    def get(self, request, *args, **kwargs):
+        # FIXME that's gonna be a middleware
+        if not 'token' in request.COOKIES:
+            return HttpResponse({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            obj = UserTokens.objects.get(token=request.COOKIES['token'])
+            # FIXME move to utils/responses
+            return HttpResponse(JSONRenderer().render({
+                "status": "Ok",
+                "payload": UserSerializer(obj.user).data
+            }))
+        except:
+            return HttpResponse({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_401_UNAUTHORIZED)
+
+
 class LoginView(APIView):
     def post(self, request, *args, **kwargs):
         email = request.data.get("email")
