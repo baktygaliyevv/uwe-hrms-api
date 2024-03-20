@@ -33,6 +33,8 @@ DEBUG = os.getenv('DEBUG') == '1'
 
 ALLOWED_HOSTS = ['.localhost', '.dyzoon.dev', '.0.0.0.0', '127.0.0.1']
 
+USE_X_FORWARDED_HOST = os.getenv('MODE') == 'production'
+
 # Application definition
 
 INSTALLED_APPS = [
