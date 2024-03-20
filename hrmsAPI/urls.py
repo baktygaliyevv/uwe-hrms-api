@@ -29,43 +29,43 @@ API_VERSION = '1'
 
 routes = [
     # users
-    ('users/', GetAllUsers),
-    ('users/add', AddUser),
-    ('users/<int:id>/', EditUser),
-    ('users/<int:id>/delete/', DeleteUser),
+    ('users/', GetAllUsers, 'GetAllUsers'),
+    ('users/add', AddUser, 'AddUser'),
+    ('users/<int:id>/', EditUser, 'EditUser'),
+    ('users/<int:id>/delete/', DeleteUser, 'DeleteUser'),
 
     #menu
-    ('menu/', GetMenuItems),
-    ('menu/add', AddMenuItem),
-    ('menu/<int:id>/', EditMenuItem),
-    ('menu/<int:id>/', DeleteMenuItem),
-    ('menu/<int:id>/products/', AddMenuProduct),
-    ('menu/<int:id>/products/<int:productId>/', DeleteMenuProduct),
-    ('menu/categories/', GetMenuCategories),
-    ('menu/categories/', AddMenuCategory),
+    ('menu/', GetMenuItems, 'GetMenuItems'),
+    ('menu/add', AddMenuItem, 'AddMenuItem'),
+    ('menu/<int:id>/', EditMenuItem, 'EditMenuItem'),
+    ('menu/<int:id>/', DeleteMenuItem, 'DeleteMenuItem'),
+    ('menu/<int:id>/products/', AddMenuProduct, 'AddMenuProduct'),
+    ('menu/<int:id>/products/<int:productId>/', DeleteMenuProduct, 'DeleteMenuProduct'),
+    ('menu/categories/', GetMenuCategories, 'GetMenuCategories'),
+    ('menu/categories/', AddMenuCategory, 'AddMenuCategory'),
 
     #products
-    ('products/', GetProducts),
-    ('products/', AddProduct),
-    ('products/<int:id>/', EditProduct),
-    ('products/<int:id>/', DeleteProduct),
+    ('products/', GetProducts, 'GetProducts'),
+    ('products/', AddProduct, 'AddProduct'),
+    ('products/<int:id>/', EditProduct, 'EditProduct'),
+    ('products/<int:id>/', DeleteProduct, 'DeleteProduct'),
 
     #promocodes
-    ('promocodes/', GetAllPromocodes),
-    ('promocodes/add', AddPromocode),
-    ('promocodes/<id>/', DeletePromocode),
+    ('promocodes/', GetAllPromocodes, 'GetAllPromocodes'),
+    ('promocodes/add', AddPromocode, 'AddPromocode'),
+    ('promocodes/<id>/', DeletePromocode, 'DeletePromocode'),
 
     #tables
-    ('tables/', GetAddTable),
-    ('tables/<int:id>', EditDeleteTable),
+    ('tables/', GetAddTable, 'GetAddTable'),
+    ('tables/<int:id>', EditDeleteTable, 'EditDeleteTable'),
 
     #auth
-    ('auth/login/', LoginView),
+    ('auth/login/', LoginView, 'LoginView'),
 ]
 
 router = routers.DefaultRouter()
-for url, view in routes:
-    router.register(url, view.as_view())
+for url, view, basename in routes:
+    router.register(url, view.as_view(), basename=basename)
 
 urlpatterns = [
     path(f'api/v{API_VERSION}/', include(router.urls))
