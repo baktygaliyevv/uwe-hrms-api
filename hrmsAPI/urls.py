@@ -65,7 +65,7 @@ routes = [
 
 router = routers.DefaultRouter()
 for url, view, basename in routes:
-    router.register(url, view.as_view(), basename=basename)
+    router.register(url, view, basename=basename)
 
 urlpatterns = [
     path(f'api/v{API_VERSION}/', include(router.urls))
