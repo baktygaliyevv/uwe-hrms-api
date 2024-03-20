@@ -15,9 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from django.http import HttpResponse
-from rest_framework import routers
 from .methods.users.views import AddUser, GetAllUsers, EditUser, DeleteUser
 from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories
 from .methods.products.views import GetProducts, AddProduct, DeleteProduct, EditProduct
@@ -25,48 +24,41 @@ from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeleteProm
 from .methods.tables.views import GetAddTable, EditDeleteTable
 from .methods.auth.views import LoginView
 
-API_VERSION = '1'
-
-routes = [
-    # users
-    ('users/', GetAllUsers, 'GetAllUsers'),
-    ('users/add', AddUser, 'AddUser'),
-    ('users/<int:id>/', EditUser, 'EditUser'),
-    ('users/<int:id>/delete/', DeleteUser, 'DeleteUser'),
-
-    #menu
-    ('menu/', GetMenuItems, 'GetMenuItems'),
-    ('menu/add', AddMenuItem, 'AddMenuItem'),
-    ('menu/<int:id>/', EditMenuItem, 'EditMenuItem'),
-    ('menu/<int:id>/', DeleteMenuItem, 'DeleteMenuItem'),
-    ('menu/<int:id>/products/', AddMenuProduct, 'AddMenuProduct'),
-    ('menu/<int:id>/products/<int:productId>/', DeleteMenuProduct, 'DeleteMenuProduct'),
-    ('menu/categories/', GetMenuCategories, 'GetMenuCategories'),
-    ('menu/categories/', AddMenuCategory, 'AddMenuCategory'),
-
-    #products
-    ('products/', GetProducts, 'GetProducts'),
-    ('products/', AddProduct, 'AddProduct'),
-    ('products/<int:id>/', EditProduct, 'EditProduct'),
-    ('products/<int:id>/', DeleteProduct, 'DeleteProduct'),
-
-    #promocodes
-    ('promocodes/', GetAllPromocodes, 'GetAllPromocodes'),
-    ('promocodes/add', AddPromocode, 'AddPromocode'),
-    ('promocodes/<id>/', DeletePromocode, 'DeletePromocode'),
-
-    #tables
-    ('tables/', GetAddTable, 'GetAddTable'),
-    ('tables/<int:id>', EditDeleteTable, 'EditDeleteTable'),
-
-    #auth
-    ('auth/login/', LoginView, 'LoginView'),
-]
-
-router = routers.DefaultRouter()
-for url, view, basename in routes:
-    router.register(url, view, basename=basename)
+# FIXME that's not ok :(
+API_BASE_URL = 'api/v1/'
 
 urlpatterns = [
-    path(f'api/v{API_VERSION}/', include(router.urls))
+    #users
+    path(f'{API_BASE_URL}users/', GetAllUsers.as_view(), name='get-users'),
+    path(f'{API_BASE_URL}users/add', AddUser.as_view(), name='add-users'),
+    path(f'{API_BASE_URL}users/<int:id>/', EditUser.as_view(), name='edit-user'),
+    path(f'{API_BASE_URL}users/<int:id>/delete/', DeleteUser.as_view(), name='delete-user'),
+
+    #menu
+    path(f'{API_BASE_URL}menu/', GetMenuItems.as_view(), name='get-menu-item'),
+    path(f'{API_BASE_URL}menu/add', AddMenuItem.as_view(), name='add-menu-item'),
+    path(f'{API_BASE_URL}menu/<int:id>/', EditMenuItem.as_view(), name='edit-menu-item'),
+    path(f'{API_BASE_URL}menu/<int:id>/', DeleteMenuItem.as_view(), name='delete-menu-item'),
+    path(f'{API_BASE_URL}menu/<int:id>/products/', AddMenuProduct.as_view(), name='add-menu-product'),
+    path(f'{API_BASE_URL}menu/<int:id>/products/<int:productId>/', DeleteMenuProduct.as_view(), name='delete-menu-product'),
+    path(f'{API_BASE_URL}menu/categories/', GetMenuCategories.as_view(), name='get-menu-categories'),
+    path(f'{API_BASE_URL}menu/categories/', AddMenuCategory.as_view(), name='add-menu-category'),
+
+    #products
+    path(f'{API_BASE_URL}products/', GetProducts.as_view(), name='get-products'),
+    path(f'{API_BASE_URL}products/', AddProduct.as_view(), name='add-product'),
+    path(f'{API_BASE_URL}products/<int:id>/', EditProduct.as_view(), name='edit-product'),
+    path(f'{API_BASE_URL}products/<int:id>/', DeleteProduct.as_view(), name='delete-product'),
+
+    #promocodes
+    path(f'{API_BASE_URL}promocodes/', GetAllPromocodes.as_view(), name='get-promocodes'),
+    path(f'{API_BASE_URL}promocodes/add', AddPromocode.as_view(), name='add-promocode'),
+    path(f'{API_BASE_URL}promocodes/<id>/', DeletePromocode.as_view(), name='delete-promocode'),
+
+    #tables
+    path(f'{API_BASE_URL}tables/', GetAddTable.as_view(), name='get-add-tables'),
+    path(f'{API_BASE_URL}tables/<int:id>', EditDeleteTable.as_view(), name='edit-delete-table'),
+
+    #auth
+    path(f'{API_BASE_URL}auth/login/', LoginView.as_view(), name='login'),
 ]
