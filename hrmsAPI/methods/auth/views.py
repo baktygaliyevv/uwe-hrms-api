@@ -1,12 +1,27 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
-from django.http import HttpResponse
 from rest_framework import status
 from ...models import Users, UserTokens
 from .serializers import UserSerializer, UserTokenSerializer
 import secrets
 from datetime import timedelta, datetime
+
+class IndexView(APIView):
+    def get(self, request, *args, **kwargs):
+        # FIXME that's gonna be a middleware
+        if not 'token' in request.COOKIES:
+            return Response({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            obj = UserTokens.objects.get(token=request.COOKIES['token'])
+            # FIXME move to utils/responses
+            return Response({
+                "status": "Ok",
+                "payload": UserSerializer(obj.user).data
+            })
+        except:
+            return Response({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_401_UNAUTHORIZED)
+
 
 class LoginView(APIView):
     def post(self, request, *args, **kwargs):
