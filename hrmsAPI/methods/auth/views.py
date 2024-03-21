@@ -5,7 +5,7 @@ from rest_framework import status
 from ...models import Users, UserTokens
 from .serializers import UserSerializer, UserTokenSerializer
 import secrets
-from datetime import timedelta, datetime
+from django.utils import timezone
 
 class AuthView(APIView):
     def get(self, request, *args, **kwargs):
@@ -37,7 +37,7 @@ class AuthLoginView(APIView):
 
         token = secrets.token_hex(32)
         expiration_duration = 60  # Token is valid for 60 days
-        expiration_date = datetime.now() + timedelta(days=expiration_duration)
+        expiration_date = timezone.now() + timezone.timedelta(days=expiration_duration)
 
         UserTokens.objects.create(user=user, token=token, expiration_date=expiration_date)
 
