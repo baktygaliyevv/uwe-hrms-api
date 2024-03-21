@@ -24,8 +24,7 @@ from .methods.products.views import GetProducts, AddProduct, DeleteProduct, Edit
 from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode
 from .methods.tables.views import GetAddTable, EditDeleteTable
 from .methods.auth.views import LoginView
-from .methods.orders.views import GetOrder, EditDeleteOrder, AddOrder
-from .methods.orderMenu.views import AddOrderMenu, EditOrderMenu, DeleteOrderMenu
+from .methods.orders.views import GetOrder, EditDeleteOrder, AddOrder, AddOrderMenu, EditOrderMenu, DeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
 
 def ping_view(request):
@@ -73,14 +72,14 @@ urlpatterns = [
     path('auth/login/', LoginView.as_view(), name='login'),
     
     #orders
-    path('orders/', GetOrder.as_view(),name='get-orders'),
-    path('orders/', AddOrder.as_view(),name='add-orders'),
-    path('orders/<int:id>', EditDeleteOrder.as_view(),name='edit-delete-order'),
-    path('orders/<int:id>/items', AddOrderMenu.as_view(),name='add-order-menu-items'),
-    path('orders/<int:id>/items/<int:itemId>',EditOrderMenu.as_view(),name='edit-order-menu-item'),
-    path('orders/<int:id>/items/<int:itemId>',DeleteOrderMenu.as_view(),name='delete-order-menu-item'),
+    path(f'{API_BASE_URL}orders', GetOrder.as_view(),name='get-orders'),
+    path(f'{API_BASE_URL}orders', AddOrder.as_view(),name='add-orders'),
+    path(f'{API_BASE_URL}orders/<int:id>', EditDeleteOrder.as_view(),name='edit-delete-order'),
+    path(f'{API_BASE_URL}orders/<int:id>/items', AddOrderMenu.as_view(),name='add-order-menu-items'),
+    path(f'{API_BASE_URL}orders/<int:id>/items/<int:itemId>',EditOrderMenu.as_view(),name='edit-order-menu-item'),
+    path(f'{API_BASE_URL}orders/<int:id>/items/<int:itemId>',DeleteOrderMenu.as_view(),name='delete-order-menu-item'),
 
     #restaurants
-    path('restaurants/', GetRestaurant.as_view(),name='get-restaurants'),
-    path('orders/<int:id>',DeleteRestaurant.as_view(),name='delete-restaurant'),
+    path(f'{API_BASE_URL}restaurants', GetRestaurant.as_view(),name='get-restaurants'),
+    path(f'{API_BASE_URL}restaurants/<int:id>',DeleteRestaurant.as_view(),name='delete-restaurant'),
 ]
