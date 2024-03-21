@@ -44,7 +44,7 @@ class AuthLoginView(APIView):
         response_data = {
             "user": UserSerializer(user).data,
         }
-        response = HttpResponse(JSONRenderer().render(response_data))
+        response = Response(response_data)
         response.set_cookie(key="token", value=token, expires=expiration_date, httponly=True, secure=True)
         
         return response
