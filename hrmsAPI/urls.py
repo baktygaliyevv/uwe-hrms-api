@@ -29,37 +29,37 @@ API_BASE_URL = 'api/v1/'
 
 urlpatterns = [
     #users
-    path(f'{API_BASE_URL}users/', GetAllUsers.as_view(), name='get-users'),
-    path(f'{API_BASE_URL}users/', AddUser.as_view(), name='add-users'),
-    path(f'{API_BASE_URL}users/<int:id>/', EditUser.as_view(), name='edit-user'),
-    path(f'{API_BASE_URL}users/<int:id>/delete/', DeleteUser.as_view(), name='delete-user'),
+    path(f'{API_BASE_URL}users', GetAllUsers.as_view(), name='get-users'),
+    path(f'{API_BASE_URL}users', AddUser.as_view(), name='add-users'),
+    path(f'{API_BASE_URL}users/<int:id>', EditUser.as_view(), name='edit-user'),
+    path(f'{API_BASE_URL}users/<int:id>/delete', DeleteUser.as_view(), name='delete-user'),
 
     #menu
-    path(f'{API_BASE_URL}menu/', GetMenuItems.as_view(), name='get-menu-item'),
-    path(f'{API_BASE_URL}menu/', AddMenuItem.as_view(), name='add-menu-item'),
-    path(f'{API_BASE_URL}menu/<int:id>/', EditMenuItem.as_view(), name='edit-menu-item'),
-    path(f'{API_BASE_URL}menu/<int:id>/', DeleteMenuItem.as_view(), name='delete-menu-item'),
-    path(f'{API_BASE_URL}menu/<int:id>/products/', AddMenuProduct.as_view(), name='add-menu-product'),
-    path(f'{API_BASE_URL}menu/<int:id>/products/<int:productId>/', DeleteMenuProduct.as_view(), name='delete-menu-product'),
-    path(f'{API_BASE_URL}menu/categories/', GetMenuCategories.as_view(), name='get-menu-categories'),
-    path(f'{API_BASE_URL}menu/categories/', AddMenuCategory.as_view(), name='add-menu-category'),
+    path(f'{API_BASE_URL}menu', GetMenuItems.as_view(), name='get-menu-item'),
+    path(f'{API_BASE_URL}menu', AddMenuItem.as_view(), name='add-menu-item'),
+    path(f'{API_BASE_URL}menu/<int:id>', EditMenuItem.as_view(), name='edit-menu-item'),
+    path(f'{API_BASE_URL}menu/<int:id>', DeleteMenuItem.as_view(), name='delete-menu-item'),
+    path(f'{API_BASE_URL}menu/<int:id>/products', AddMenuProduct.as_view(), name='add-menu-product'),
+    path(f'{API_BASE_URL}menu/<int:id>/products/<int:productId>', DeleteMenuProduct.as_view(), name='delete-menu-product'),
+    path(f'{API_BASE_URL}menu/categories', GetMenuCategories.as_view(), name='get-menu-categories'),
+    path(f'{API_BASE_URL}menu/categories', AddMenuCategory.as_view(), name='add-menu-category'),
 
     #products
-    path(f'{API_BASE_URL}products/', GetProducts.as_view(), name='get-products'),
-    path(f'{API_BASE_URL}products/', AddProduct.as_view(), name='add-product'),
-    path(f'{API_BASE_URL}products/<int:id>/', EditProduct.as_view(), name='edit-product'),
-    path(f'{API_BASE_URL}products/<int:id>/', DeleteProduct.as_view(), name='delete-product'),
+    path(f'{API_BASE_URL}products', GetProducts.as_view(), name='get-products'),
+    path(f'{API_BASE_URL}products', AddProduct.as_view(), name='add-product'),
+    path(f'{API_BASE_URL}products/<int:id>', EditProduct.as_view(), name='edit-product'),
+    path(f'{API_BASE_URL}products/<int:id>', DeleteProduct.as_view(), name='delete-product'),
 
     #promocodes
-    path(f'{API_BASE_URL}promocodes/', GetAllPromocodes.as_view(), name='get-promocodes'),
-    path(f'{API_BASE_URL}promocodes/', AddPromocode.as_view(), name='add-promocode'),
-    path(f'{API_BASE_URL}promocodes/<id>/', DeletePromocode.as_view(), name='delete-promocode'),
+    path(f'{API_BASE_URL}promocodes', GetAllPromocodes.as_view(), name='get-promocodes'),
+    path(f'{API_BASE_URL}promocodes', AddPromocode.as_view(), name='add-promocode'),
+    path(f'{API_BASE_URL}promocodes/<id>', DeletePromocode.as_view(), name='delete-promocode'),
 
     #tables
-    path(f'{API_BASE_URL}tables/', GetAddTable.as_view(), name='get-add-tables'),
+    path(f'{API_BASE_URL}tables', GetAddTable.as_view(), name='get-add-tables'),
     path(f'{API_BASE_URL}tables/<int:id>', EditDeleteTable.as_view(), name='edit-delete-table'),
 
     #auth
     path(f'{API_BASE_URL}auth', AuthView.as_view(), name='auth'),
-    path(f'{API_BASE_URL}auth/login/', AuthLoginView.as_view(), name='auth-login'),
+    path(f'{API_BASE_URL}auth/login', AuthLoginView.as_view(), name='auth-login'),
 ]
