@@ -17,55 +17,49 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponse
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from .methods.users.views import AddUser, GetAllUsers, EditUser, DeleteUser
 from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories
 from .methods.products.views import GetProducts, AddProduct, DeleteProduct, EditProduct
 from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode
 from .methods.tables.views import GetAddTable, EditDeleteTable
-from .methods.auth.views import LoginView
+from .methods.auth.views import AuthView, AuthLoginView
 
-def ping_view(request):
-    return HttpResponse("pong", status=200)
+# FIXME that's not ok :(
+API_BASE_URL = 'api/v1/'
 
 urlpatterns = [
-    path('', ping_view, name='ping'),
-    path('ping/', ping_view, name='ping'),
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-
     #users
-    path('users/', GetAllUsers.as_view(), name='get-users'),
-    path('users/add', AddUser.as_view(), name='add-users'),
-    path('users/<int:id>/', EditUser.as_view(), name='edit-user'),
-    path('users/<int:id>/delete/', DeleteUser.as_view(), name='delete-user'),
+    path(f'{API_BASE_URL}users', GetAllUsers.as_view(), name='get-users'),
+    path(f'{API_BASE_URL}users', AddUser.as_view(), name='add-users'),
+    path(f'{API_BASE_URL}users/<int:id>', EditUser.as_view(), name='edit-user'),
+    path(f'{API_BASE_URL}users/<int:id>/delete', DeleteUser.as_view(), name='delete-user'),
 
     #menu
-    path('menu/', GetMenuItems.as_view(), name='get-menu-item'),
-    path('menu/add', AddMenuItem.as_view(), name='add-menu-item'),
-    path('menu/<int:id>/', EditMenuItem.as_view(), name='edit-menu-item'),
-    path('menu/<int:id>/', DeleteMenuItem.as_view(), name='delete-menu-item'),
-    path('menu/<int:id>/products/', AddMenuProduct.as_view(), name='add-menu-product'),
-    path('menu/<int:id>/products/<int:productId>/', DeleteMenuProduct.as_view(), name='delete-menu-product'),
-    path('menu/categories/', GetMenuCategories.as_view(), name='get-menu-categories'),
-    path('menu/categories/', AddMenuCategory.as_view(), name='add-menu-category'),
+    path(f'{API_BASE_URL}menu', GetMenuItems.as_view(), name='get-menu-item'),
+    path(f'{API_BASE_URL}menu', AddMenuItem.as_view(), name='add-menu-item'),
+    path(f'{API_BASE_URL}menu/<int:id>', EditMenuItem.as_view(), name='edit-menu-item'),
+    path(f'{API_BASE_URL}menu/<int:id>', DeleteMenuItem.as_view(), name='delete-menu-item'),
+    path(f'{API_BASE_URL}menu/<int:id>/products', AddMenuProduct.as_view(), name='add-menu-product'),
+    path(f'{API_BASE_URL}menu/<int:id>/products/<int:productId>', DeleteMenuProduct.as_view(), name='delete-menu-product'),
+    path(f'{API_BASE_URL}menu/categories', GetMenuCategories.as_view(), name='get-menu-categories'),
+    path(f'{API_BASE_URL}menu/categories', AddMenuCategory.as_view(), name='add-menu-category'),
 
     #products
-    path('products/', GetProducts.as_view(), name='get-products'),
-    path('products/', AddProduct.as_view(), name='add-product'),
-    path('products/<int:id>/', EditProduct.as_view(), name='edit-product'),
-    path('products/<int:id>/', DeleteProduct.as_view(), name='delete-product'),
+    path(f'{API_BASE_URL}products', GetProducts.as_view(), name='get-products'),
+    path(f'{API_BASE_URL}products', AddProduct.as_view(), name='add-product'),
+    path(f'{API_BASE_URL}products/<int:id>', EditProduct.as_view(), name='edit-product'),
+    path(f'{API_BASE_URL}products/<int:id>', DeleteProduct.as_view(), name='delete-product'),
 
     #promocodes
-    path('promocodes/', GetAllPromocodes.as_view(), name='get-promocodes'),
-    path('promocodes/add', AddPromocode.as_view(), name='add-promocode'),
-    path('promocodes/<id>/', DeletePromocode.as_view(), name='delete-promocode'),
+    path(f'{API_BASE_URL}promocodes', GetAllPromocodes.as_view(), name='get-promocodes'),
+    path(f'{API_BASE_URL}promocodes', AddPromocode.as_view(), name='add-promocode'),
+    path(f'{API_BASE_URL}promocodes/<id>', DeletePromocode.as_view(), name='delete-promocode'),
 
     #tables
-    path('tables/', GetAddTable.as_view(), name='get-add-tables'),
-    path('tables/<int:id>', EditDeleteTable.as_view(), name='edit-delete-table'),
+    path(f'{API_BASE_URL}tables', GetAddTable.as_view(), name='get-add-tables'),
+    path(f'{API_BASE_URL}tables/<int:id>', EditDeleteTable.as_view(), name='edit-delete-table'),
 
     #auth
-    path('auth/login/', LoginView.as_view(), name='login'),
+    path(f'{API_BASE_URL}auth', AuthView.as_view(), name='auth'),
+    path(f'{API_BASE_URL}auth/login', AuthLoginView.as_view(), name='auth-login'),
 ]
