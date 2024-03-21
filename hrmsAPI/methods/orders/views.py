@@ -4,6 +4,7 @@ from ...models import Orders
 from .serializers import OrderSerializer
 
 class GetOrder(generics.ListCreateAPIView):
+    serializer_class=OrderSerializer
     def get(self, request, *args, **kwargs):
         queryset = Orders.objects.all()
         serializer_class = OrderSerializer(queryset, many=True)
@@ -13,8 +14,8 @@ class GetOrder(generics.ListCreateAPIView):
         })
 
 class AddOrder(generics.CreateAPIView):
-        queryset = Orders.objects.all()
-        serializer_class = OrderSerializer
+    queryset = Orders.objects.all()
+    serializer_class = OrderSerializer
 
 class EditDeleteOrder(generics.RetrieveUpdateDestroyAPIView):
     queryset = Orders.objects.all()
