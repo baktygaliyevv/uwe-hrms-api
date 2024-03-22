@@ -29,9 +29,18 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def get_items(self, obj):
         menus_ids = OrderMenu.objects.filter(order=obj).values_list('menu',flat=True)
-        menu = Menu.objects.filter(id__in=menus_ids)
-        return MenuSerializer(menu,many=True).data
+        menu_items = Menu.objects.filter(id__in=menus_ids)
+        items_data = []
+        for item in menu_items:
+            order_menu = OrderMenu.objects.get(order=obj, menu=item)
+            item_data = {
+                'item': MenuSerializer(item).data,
+                'quantity': order_menu.quantity
+            }
+            items_data.append(item_data)
 
+        return {'items': items_data}
+    
     def create(self, validated_data):
         order_menu_data = validated_data.pop('order_menu')
         order = Orders.objects.create(**validated_data)
