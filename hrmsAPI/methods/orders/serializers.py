@@ -39,7 +39,7 @@ class OrderSerializer(serializers.ModelSerializer):
             }
             items_data.append(item_data)
 
-        return {'items': items_data}
+        return items_data
     
     def create(self, validated_data):
         order_menu_data = validated_data.pop('order_menu')
