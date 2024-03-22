@@ -22,6 +22,8 @@ from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteM
 from .methods.products.views import GetProducts, AddProduct, DeleteProduct, EditProduct
 from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode
 from .methods.tables.views import GetAddTable, EditDeleteTable
+from .methods.orders.views import GetOrder, EditDeleteOrder, AddOrder, AddOrderMenu, EditOrderMenu, DeleteOrderMenu
+from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
 from .methods.auth.views import AuthView, AuthLoginView
 
 # FIXME that's not ok :(
@@ -62,4 +64,16 @@ urlpatterns = [
     #auth
     path(f'{API_BASE_URL}auth', AuthView.as_view(), name='auth'),
     path(f'{API_BASE_URL}auth/login', AuthLoginView.as_view(), name='auth-login'),
+    
+    #orders
+    path(f'{API_BASE_URL}orders', GetOrder.as_view(),name='get-orders'),
+    path(f'{API_BASE_URL}orders', AddOrder.as_view(),name='add-orders'),
+    path(f'{API_BASE_URL}orders/<int:id>', EditDeleteOrder.as_view(),name='edit-delete-order'),
+    path(f'{API_BASE_URL}orders/<int:id>/items', AddOrderMenu.as_view(),name='add-order-menu-items'),
+    path(f'{API_BASE_URL}orders/<int:id>/items/<int:itemId>',EditOrderMenu.as_view(),name='edit-order-menu-item'),
+    path(f'{API_BASE_URL}orders/<int:id>/items/<int:itemId>',DeleteOrderMenu.as_view(),name='delete-order-menu-item'),
+
+    #restaurants
+    path(f'{API_BASE_URL}restaurants', GetRestaurant.as_view(),name='get-restaurants'),
+    path(f'{API_BASE_URL}restaurants/<int:id>',DeleteRestaurant.as_view(),name='delete-restaurant'),
 ]
