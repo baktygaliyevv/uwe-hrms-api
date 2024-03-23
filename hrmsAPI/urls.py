@@ -25,7 +25,7 @@ from .methods.tables.views import GetAddTable, EditDeleteTable
 from .methods.orders.views import GetOrder, EditDeleteOrder, AddOrder, AddOrderMenu, EditOrderMenu, DeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
 from .methods.auth.views import AuthView, AuthLoginView
-
+from .methods.deliveries.views import GetAllDelivery, AddDelivery, EditDelivery, DeleteDelivery
 # FIXME that's not ok :(
 API_BASE_URL = 'api/v1/'
 
@@ -76,4 +76,7 @@ urlpatterns = [
     #restaurants
     path(f'{API_BASE_URL}restaurants', GetRestaurant.as_view(),name='get-restaurants'),
     path(f'{API_BASE_URL}restaurants/<int:id>',DeleteRestaurant.as_view(),name='delete-restaurant'),
+
+    #deliveries
+    path(f'{API_BASE_URL}deliveries', GetAllDelivery.as_view(),name='get-all-restaurants'),
 ]
