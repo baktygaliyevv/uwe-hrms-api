@@ -79,7 +79,6 @@ urlpatterns = [
     path(f'{API_BASE_URL}restaurants/<int:id>',DeleteRestaurant.as_view(),name='delete-restaurant'),
 
     #deliveries
-    #path(f'{API_BASE_URL}deliveries', GetDeliveries.as_view(),name='get-all-delivery'),
     path(f'{API_BASE_URL}deliveries',GetDeliveries.as_view(),name='get-delivery'),
     path(f'{API_BASE_URL}deliveries', AddDelivery.as_view(),name='add-delivery'),
     path(f'{API_BASE_URL}deliveries/<int:id>', EditDelivery.as_view(), name='edit-delivery'),
