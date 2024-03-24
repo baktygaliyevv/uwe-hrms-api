@@ -25,7 +25,7 @@ from .methods.tables.views import GetAddTable, EditDeleteTable
 from .methods.orders.views import GetOrder, EditDeleteOrder, AddOrder, AddOrderMenu, EditOrderMenu, DeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
 from .methods.auth.views import AuthView, AuthLoginView
-from .methods.deliveries.views import GetAllDelivery, AddDelivery, EditDelivery, DeleteDelivery
+from .methods.delivery.views import GetDeliveries, AddDelivery, DeleteDelivery, EditDelivery
 # FIXME that's not ok :(
 API_BASE_URL = 'api/v1/'
 
@@ -56,6 +56,7 @@ urlpatterns = [
     path(f'{API_BASE_URL}promocodes', GetAllPromocodes.as_view(), name='get-promocodes'),
     path(f'{API_BASE_URL}promocodes', AddPromocode.as_view(), name='add-promocode'),
     path(f'{API_BASE_URL}promocodes/<id>', DeletePromocode.as_view(), name='delete-promocode'),
+    #path(f'{API_BASE_URL}promocodes/find/<id>', FindPromocodeByCode.as_view(), name='find-promocode-by-id'),
 
     #tables
     path(f'{API_BASE_URL}tables', GetAddTable.as_view(), name='get-add-tables'),
@@ -78,5 +79,10 @@ urlpatterns = [
     path(f'{API_BASE_URL}restaurants/<int:id>',DeleteRestaurant.as_view(),name='delete-restaurant'),
 
     #deliveries
-    path(f'{API_BASE_URL}deliveries', GetAllDelivery.as_view(),name='get-all-restaurants'),
+    #path(f'{API_BASE_URL}deliveries', GetDeliveries.as_view(),name='get-all-delivery'),
+    path(f'{API_BASE_URL}deliveries',GetDeliveries.as_view(),name='get-delivery'),
+    path(f'{API_BASE_URL}deliveries', AddDelivery.as_view(),name='add-delivery'),
+    path(f'{API_BASE_URL}deliveries/<int:id>', EditDelivery.as_view(), name='edit-delivery'),
+    path(f'{API_BASE_URL}deliveries/<int:id>', DeleteDelivery.as_view(), name='delete-delivery'),
+
 ]
