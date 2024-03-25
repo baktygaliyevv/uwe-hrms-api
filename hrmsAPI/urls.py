@@ -21,7 +21,7 @@ from .methods.users.views import AddUser, GetAllUsers, EditUser, DeleteUser
 from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories
 from .methods.products.views import GetProducts, AddProduct, DeleteProduct, EditProduct
 from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode
-from .methods.tables.views import GetAddTable, EditDeleteTable
+from .methods.tables.views import EditDeleteTable, GetAllTables, AddTable
 from .methods.orders.views import GetOrder, EditDeleteOrder, AddOrder, AddOrderMenu, EditOrderMenu, DeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
 from .methods.auth.views import AuthView, AuthLoginView
@@ -59,7 +59,8 @@ urlpatterns = [
     #path(f'{API_BASE_URL}promocodes/find/<id>', FindPromocodeByCode.as_view(), name='find-promocode-by-id'),
 
     #tables
-    path(f'{API_BASE_URL}tables', GetAddTable.as_view(), name='get-add-tables'),
+    path(f'{API_BASE_URL}tables', GetAllTables.as_view(), name='get-tables'),
+    path(f'{API_BASE_URL}tables/add', AddTable.as_view(), name='add-tables'),
     path(f'{API_BASE_URL}tables/<int:id>', EditDeleteTable.as_view(), name='edit-delete-table'),
 
     #auth
