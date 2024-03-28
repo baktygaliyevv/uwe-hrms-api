@@ -20,3 +20,16 @@ class DeletePromocode(generics.DestroyAPIView):
     queryset = Promocodes.objects.all()
     serializer_class = PromocodeSerializer
     lookup_field = 'id'
+
+class GetSpecificPromocode(generics.RetrieveAPIView):
+    queryset = Promocodes.objects.all()
+    serializer_class = PromocodeSerializer  # Just a reference to the class
+    lookup_field = 'id'
+
+    def get(self, request, *args, **kwargs):
+        promocode = self.get_object()
+        serializer = self.get_serializer(promocode)
+        return Response({
+            'status': 'Ok',
+            'payload': serializer.data 
+        })
