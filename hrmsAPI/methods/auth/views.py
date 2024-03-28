@@ -21,6 +21,20 @@ class AuthView(APIView):
             })
         except:
             return Response({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_401_UNAUTHORIZED)
+        
+    def delete(self, request, *args, **kwargs):
+        token = request.COOKIES.get('token', None)
+        if not token:
+            return Response({"error": "No token provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user_token = UserTokens.objects.get(token=token)
+            user_token.delete()
+            response = Response({"status": "Ok", "payload": "Logged out successfully."})
+            response.delete_cookie('token')
+            return response
+        except UserTokens.DoesNotExist:
+            return Response({"error": "Token not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
 class AuthLoginView(APIView):

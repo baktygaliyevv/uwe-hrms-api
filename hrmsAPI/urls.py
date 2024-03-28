@@ -20,11 +20,11 @@ from django.http import HttpResponse
 from .methods.users.views import AddUser, GetAllUsers, EditUser, DeleteUser
 from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories
 from .methods.products.views import GetProducts, AddProduct, DeleteProduct, EditProduct
-from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode
+from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode, GetSpecificPromocode
 from .methods.tables.views import EditDeleteTable, GetAllTables, AddTable
 from .methods.orders.views import GetOrder, EditDeleteOrder, AddOrder, AddOrderMenu, EditOrderMenu, DeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
-from .methods.auth.views import AuthView, AuthLoginView
+from .methods.auth.views import AuthView, AuthLoginView, AuthSignupView
 from .methods.delivery.views import GetDeliveries, AddDelivery, DeleteDelivery, EditDelivery
 # FIXME that's not ok :(
 API_BASE_URL = 'api/v1/'
