@@ -60,7 +60,7 @@ urlpatterns = [
 
     #tables
     path(f'{API_BASE_URL}tables', GetAllTables.as_view(), name='get-tables'),
-    path(f'{API_BASE_URL}tables/add', AddTable.as_view(), name='add-tables'),
+    path(f'{API_BASE_URL}tables', AddTable.as_view(), name='add-tables'),
     path(f'{API_BASE_URL}tables/<int:id>', EditDeleteTable.as_view(), name='edit-delete-table'),
 
     #auth
