@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from ...models import Users, UserTokens
-from .serializers import UserSerializer, UserTokenSerializer
+from .serializers import UserSerializer, UserTokenSerializer, UserSignupSerializer
 import secrets
 from django.utils import timezone
 
@@ -64,5 +64,9 @@ class AuthLoginView(APIView):
         return response
 
 class AuthSignupView(APIView):
-    ### signup
-    pass
+    def post(self, request, *args, **kwargs):
+        serializer = UserSignupSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "Ok", "message": "User created successfully, please check your email to verify your account."}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
