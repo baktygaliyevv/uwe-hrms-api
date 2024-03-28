@@ -42,7 +42,7 @@ class OrderSerializer(serializers.ModelSerializer):
         return items_data
     
     def create(self, validated_data):
-        order_menu_data = validated_data.pop('order_menu')
+        order_menu_data = validated_data.pop('order_menu') # здесь залупа
         order = Orders.objects.create(**validated_data)
         for menu_data in order_menu_data:
             OrderMenu.objects.create(order=order, **menu_data)

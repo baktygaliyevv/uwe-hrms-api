@@ -56,7 +56,7 @@ urlpatterns = [
     path(f'{API_BASE_URL}promocodes', GetAllPromocodes.as_view(), name='get-promocodes'),
     path(f'{API_BASE_URL}promocodes', AddPromocode.as_view(), name='add-promocode'),
     path(f'{API_BASE_URL}promocodes/<id>', DeletePromocode.as_view(), name='delete-promocode'),
-    #path(f'{API_BASE_URL}promocodes/find/<id>', FindPromocodeByCode.as_view(), name='find-promocode-by-id'),
+    path(f'{API_BASE_URL}promocodes/<id>', GetSpecificPromocode.as_view(), name='get-specific-promocode'),
 
     #tables
     path(f'{API_BASE_URL}tables', GetAllTables.as_view(), name='get-tables'),
