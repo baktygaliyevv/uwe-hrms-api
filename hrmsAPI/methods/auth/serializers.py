@@ -37,7 +37,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Users
-        fields = ('email', 'password', 'first_name', 'last_name', 'role', 'verified')
+        fields = ('email', 'password', 'first_name', 'last_name')
 
     def create(self, validated_data):
         validated_data['salt'] = secrets.token_hex(16)
