@@ -39,6 +39,8 @@ SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
 SENDGRID_FROM_EMAIL = 'noreply@dyzoon.dev'
 
+URL = 'uwe.dyzoon.dev/api/v1/'
+
 # Application definition
 
 INSTALLED_APPS = [

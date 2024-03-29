@@ -66,7 +66,8 @@ urlpatterns = [
     #auth
     path(f'{API_BASE_URL}auth', AuthView.as_view(), name='auth'),
     path(f'{API_BASE_URL}auth/login', AuthLoginView.as_view(), name='auth-login'),
-    
+    path(f'{API_BASE_URL}auth/signup', AuthSignupView.as_view(), name='auth-signup'),
+
     #orders
     path(f'{API_BASE_URL}orders', GetOrder.as_view(),name='get-orders'),
     path(f'{API_BASE_URL}orders', AddOrder.as_view(),name='add-orders'),

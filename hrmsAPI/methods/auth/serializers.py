@@ -3,10 +3,7 @@ from ...models import Users, UserTokens, EmailCodes
 import hashlib
 import secrets
 from datetime import datetime, timedelta
-from django.conf import settings
-import os
-
-
+from hrmsAPI import settings
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -61,7 +58,7 @@ def send_verification_email(to_email, code):
     from sendgrid import SendGridAPIClient
     from sendgrid.helpers.mail import Mail
 
-    verification_link = f"{settings.FRONTEND_URL}/verify?code={code}"
+    verification_link = f"{settings.URL}/verify?code={code}"
     message = Mail(
         from_email=settings.SENDGRID_FROM_EMAIL,
         to_emails=to_email,
