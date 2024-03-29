@@ -45,6 +45,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
             (validated_data.pop('password') + validated_data['salt']).encode('utf-8')
         ).hexdigest()
         validated_data['verified'] = False  
+        validated_data['role'] = 'client'
         user = Users.objects.create(**validated_data)
         
         code = secrets.token_urlsafe(18)
