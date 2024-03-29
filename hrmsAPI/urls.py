@@ -20,12 +20,13 @@ from django.http import HttpResponse
 from .methods.users.views import AddUser, GetAllUsers, EditUser, DeleteUser
 from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories
 from .methods.products.views import GetProducts, AddProduct, DeleteProduct, EditProduct
-from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode
-from .methods.tables.views import GetAllTable, EditDeleteTable
+from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode, GetSpecificPromocode
+from .methods.tables.views import EditDeleteTable, GetAllTables, AddTable
 from .methods.orders.views import GetOrder, EditDeleteOrder, AddOrder, AddOrderMenu, EditOrderMenu, DeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
-from .methods.auth.views import AuthView, AuthLoginView
+from .methods.auth.views import AuthView, AuthLoginView, AuthSignupView, AuthVerifyView
 from .methods.delivery.views import GetDeliveries, AddDelivery, EditDelivery, DeleteDelivery, AddUiClientDelivery
+
 # FIXME that's not ok :(
 API_BASE_URL = 'api/v1/'
 
@@ -56,16 +57,19 @@ urlpatterns = [
     path(f'{API_BASE_URL}promocodes', GetAllPromocodes.as_view(), name='get-promocodes'),
     path(f'{API_BASE_URL}promocodes', AddPromocode.as_view(), name='add-promocode'),
     path(f'{API_BASE_URL}promocodes/<id>', DeletePromocode.as_view(), name='delete-promocode'),
-    #path(f'{API_BASE_URL}promocodes/find/<id>', FindPromocodeByCode.as_view(), name='find-promocode-by-id'),
+    path(f'{API_BASE_URL}promocodes/<id>', GetSpecificPromocode.as_view(), name='get-specific-promocode'),
 
     #tables
-    path(f'{API_BASE_URL}tables', GetAllTable.as_view(), name='get-all-tables'),
+    path(f'{API_BASE_URL}tables', GetAllTables.as_view(), name='get-tables'),
+    path(f'{API_BASE_URL}tables', AddTable.as_view(), name='add-tables'),
     path(f'{API_BASE_URL}tables/<int:id>', EditDeleteTable.as_view(), name='edit-delete-table'),
 
     #auth
     path(f'{API_BASE_URL}auth', AuthView.as_view(), name='auth'),
     path(f'{API_BASE_URL}auth/login', AuthLoginView.as_view(), name='auth-login'),
-    
+    path(f'{API_BASE_URL}auth/signup', AuthSignupView.as_view(), name='auth-signup'),
+    path(f'{API_BASE_URL}auth/verify', AuthVerifyView.as_view(), name='auth-verify'),
+
     #orders
     path(f'{API_BASE_URL}orders', GetOrder.as_view(),name='get-orders'),
     path(f'{API_BASE_URL}orders', AddOrder.as_view(),name='add-orders'),
