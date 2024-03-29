@@ -3,6 +3,10 @@ from ...models import Tables
 from .serializers import TableSerializer
 from rest_framework.response import Response
 
+class GetAllTable(generics.ListCreateAPIView):
+    queryset = Tables.objects.all()
+    serializer_class = TableSerializer
+
 class EditDeleteTable(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tables.objects.all()
     serializer_class = TableSerializer
