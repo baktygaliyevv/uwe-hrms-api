@@ -47,7 +47,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
         validated_data['verified'] = False  
         user = Users.objects.create(**validated_data)
         
-        code = secrets.token_urlsafe()
+        code = secrets.token_urlsafe(18)
         EmailCodes.objects.create(user=user, code=code, expiration_date=datetime.now() + timedelta(days=2))
         
         send_verification_email(user.email, code)
@@ -58,12 +58,14 @@ def send_verification_email(to_email, code):
     from sendgrid import SendGridAPIClient
     from sendgrid.helpers.mail import Mail
 
-    verification_link = f"{settings.URL}/verify?code={code}"
+    verification_link = f"{settings.URL}/api/v1/auth/verify?code={code}"
+    html_content = f'Please verify your email by clicking on this link: <a href="{verification_link}">Verify Email</a>' # can be changed
+
     message = Mail(
         from_email=settings.SENDGRID_FROM_EMAIL,
         to_emails=to_email,
         subject='Verify your email',
-        html_content=f'Please verify your email by clicking on this link: <a href="{verification_link}">Verify Email</a>'
+        html_content=html_content
     )
     
     sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
