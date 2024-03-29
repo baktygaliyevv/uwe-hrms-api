@@ -39,9 +39,7 @@ SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
 SENDGRID_FROM_EMAIL = 'noreply@dyzoon.dev'
 
-# URL = 'https://uwe.dyzoon.dev'
-
-URL = 'http://localhost:8000'
+URL = 'https://uwe.dyzoon.dev'
 
 # Application definition
 
