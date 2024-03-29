@@ -35,6 +35,12 @@ ALLOWED_HOSTS = ['.localhost', '.dyzoon.dev', '.0.0.0.0', '127.0.0.1']
 
 USE_X_FORWARDED_HOST = os.getenv('MODE') == 'production'
 
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
+SENDGRID_FROM_EMAIL = 'noreply@dyzoon.dev'
+
+URL = 'https://uwe.dyzoon.dev'
+
 # Application definition
 
 INSTALLED_APPS = [

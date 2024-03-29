@@ -24,7 +24,7 @@ from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeleteProm
 from .methods.tables.views import EditDeleteTable, GetAllTables, AddTable
 from .methods.orders.views import GetOrder, EditDeleteOrder, AddOrder, AddOrderMenu, EditOrderMenu, DeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
-from .methods.auth.views import AuthView, AuthLoginView, AuthSignupView
+from .methods.auth.views import AuthView, AuthLoginView, AuthSignupView, AuthVerifyView
 from .methods.delivery.views import GetDeliveries, AddDelivery, DeleteDelivery, EditDelivery
 # FIXME that's not ok :(
 API_BASE_URL = 'api/v1/'
@@ -66,7 +66,9 @@ urlpatterns = [
     #auth
     path(f'{API_BASE_URL}auth', AuthView.as_view(), name='auth'),
     path(f'{API_BASE_URL}auth/login', AuthLoginView.as_view(), name='auth-login'),
-    
+    path(f'{API_BASE_URL}auth/signup', AuthSignupView.as_view(), name='auth-signup'),
+    path(f'{API_BASE_URL}auth/verify', AuthVerifyView.as_view(), name='auth-verify'),
+
     #orders
     path(f'{API_BASE_URL}orders', GetOrder.as_view(),name='get-orders'),
     path(f'{API_BASE_URL}orders', AddOrder.as_view(),name='add-orders'),

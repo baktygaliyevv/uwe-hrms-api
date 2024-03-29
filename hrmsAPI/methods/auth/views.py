@@ -1,9 +1,11 @@
+from django.shortcuts import redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework import status
-from ...models import Users, UserTokens
-from .serializers import UserSerializer, UserTokenSerializer
+from hrmsAPI import settings
+from ...models import EmailCodes, Users, UserTokens
+from .serializers import UserSerializer, UserTokenSerializer, UserSignupSerializer
 import secrets
 from django.utils import timezone
 
@@ -64,5 +66,34 @@ class AuthLoginView(APIView):
         return response
 
 class AuthSignupView(APIView):
-    ### signup
-    pass
+    def post(self, request, *args, **kwargs):
+        serializer = UserSignupSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "Ok", "message": "User created successfully, please check your email to verify your account."}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AuthVerifyView(APIView):
+    def get(self, request, *args, **kwargs):
+        code = request.query_params.get('code')
+        success_url = settings.URL + '/login?success=true'
+        error_url = settings.URL + '/login'
+
+        if not code:
+            return redirect(error_url)
+
+        try:
+            email_code = EmailCodes.objects.get(code=code)
+        except EmailCodes.DoesNotExist:
+            return redirect(error_url)
+
+        if email_code.is_valid():
+            user = email_code.user
+            user.verified = True
+            user.save()
+            email_code.delete()
+
+            return redirect(success_url)
+        
+        else:
+            return redirect(error_url)
