@@ -28,7 +28,6 @@ class AddUiClientDelivery(generics.CreateAPIView):
             'email': request.data.get('email'),
             'first_name': request.data.get('first_name'),
             'last_name': request.data.get('last_name'),
-            # Добавьте другие поля, если это необходимо
         }
         user_serializer = UserSerializer(data=user_data)
         if user_serializer.is_valid():
@@ -38,9 +37,11 @@ class AddUiClientDelivery(generics.CreateAPIView):
             delivery_serializer = self.get_serializer(data=delivery_data)
             if delivery_serializer.is_valid():
                 delivery_serializer.save()
-                return Response(delivery_serializer.data, status=status.HTTP_201_CREATED)
+                return Response({
+                    'status': 'Ok',
+                    'payload': delivery_serializer.data
+                })
             else:
-                # Удаляем пользователя, если не удалось создать доставку
                 user.delete()
                 return Response(delivery_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:

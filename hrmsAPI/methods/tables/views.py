@@ -2,7 +2,7 @@ from rest_framework import generics
 from ...models import Tables
 from .serializers import TableSerializer
 
-class GetAddTable(generics.ListCreateAPIView):
+class GetAllTable(generics.ListCreateAPIView):
     queryset = Tables.objects.all()
     serializer_class = TableSerializer
 

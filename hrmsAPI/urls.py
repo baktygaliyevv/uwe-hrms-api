@@ -32,13 +32,13 @@ API_BASE_URL = 'api/v1/'
 urlpatterns = [
     #users
     path(f'{API_BASE_URL}users', GetAllUsers.as_view(), name='get-users'),
-    path(f'{API_BASE_URL}users/add', AddUser.as_view(), name='add-users'),
+    path(f'{API_BASE_URL}users', AddUser.as_view(), name='add-users'),
     path(f'{API_BASE_URL}users/<int:id>', EditUser.as_view(), name='edit-user'),
     path(f'{API_BASE_URL}users/<int:id>/delete', DeleteUser.as_view(), name='delete-user'),
 
     #menu
     path(f'{API_BASE_URL}menu', GetMenuItems.as_view(), name='get-menu-item'),
-    path(f'{API_BASE_URL}menu/add', AddMenuItem.as_view(), name='add-menu-item'),
+    path(f'{API_BASE_URL}menu', AddMenuItem.as_view(), name='add-menu-item'),
     path(f'{API_BASE_URL}menu/<int:id>', EditMenuItem.as_view(), name='edit-menu-item'),
     path(f'{API_BASE_URL}menu/<int:id>', DeleteMenuItem.as_view(), name='delete-menu-item'),
     path(f'{API_BASE_URL}menu/<int:id>/products', AddMenuProduct.as_view(), name='add-menu-product'),
@@ -48,13 +48,13 @@ urlpatterns = [
 
     #products
     path(f'{API_BASE_URL}products', GetProducts.as_view(), name='get-products'),
-    path(f'{API_BASE_URL}products/add', AddProduct.as_view(), name='add-product'),
+    path(f'{API_BASE_URL}products', AddProduct.as_view(), name='add-product'),
     path(f'{API_BASE_URL}products/<int:id>', EditProduct.as_view(), name='edit-product'),
     path(f'{API_BASE_URL}products/<int:id>', DeleteProduct.as_view(), name='delete-product'),
 
     #promocodes
     path(f'{API_BASE_URL}promocodes', GetAllPromocodes.as_view(), name='get-promocodes'),
-    path(f'{API_BASE_URL}promocodes/add', AddPromocode.as_view(), name='add-promocode'),
+    path(f'{API_BASE_URL}promocodes', AddPromocode.as_view(), name='add-promocode'),
     path(f'{API_BASE_URL}promocodes/<id>', DeletePromocode.as_view(), name='delete-promocode'),
     #path(f'{API_BASE_URL}promocodes/find/<id>', FindPromocodeByCode.as_view(), name='find-promocode-by-id'),
 
@@ -68,7 +68,7 @@ urlpatterns = [
     
     #orders
     path(f'{API_BASE_URL}orders', GetOrder.as_view(),name='get-orders'),
-    path(f'{API_BASE_URL}orders/add', AddOrder.as_view(),name='add-orders'),
+    path(f'{API_BASE_URL}orders', AddOrder.as_view(),name='add-orders'),
     path(f'{API_BASE_URL}orders/<int:id>', EditDeleteOrder.as_view(),name='edit-delete-order'),
     path(f'{API_BASE_URL}orders/<int:id>/items', AddOrderMenu.as_view(),name='add-order-menu-items'),
     path(f'{API_BASE_URL}orders/<int:id>/items/<int:itemId>',EditOrderMenu.as_view(),name='edit-order-menu-item'),
@@ -80,9 +80,9 @@ urlpatterns = [
 
     #deliveries
     path(f'{API_BASE_URL}deliveries',GetDeliveries.as_view(),name='get-delivery'),
-    path(f'{API_BASE_URL}deliveries/add', AddDelivery.as_view(),name='add-delivery'),
-    path(f'{API_BASE_URL}deliveries/addUI', AddUiClientDelivery.as_view(),name='add-ui-delivery'),
+    path(f'{API_BASE_URL}deliveries', AddDelivery.as_view(),name='add-delivery'),
+    path(f'{API_BASE_URL}deliveries/client', AddUiClientDelivery.as_view(),name='add-ui-delivery'),
     path(f'{API_BASE_URL}deliveries/<int:id>', EditDelivery.as_view(), name='edit-delivery'),
-    path(f'{API_BASE_URL}deliveriess/<int:id>', DeleteDelivery.as_view(), name='delete-delivery'),
+    path(f'{API_BASE_URL}deliveries/<int:id>', DeleteDelivery.as_view(), name='delete-delivery'),
 
 ]
