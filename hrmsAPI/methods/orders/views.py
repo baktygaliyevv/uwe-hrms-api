@@ -32,10 +32,8 @@ class GetAddOrder(generics.ListCreateAPIView):
 
 class GetAddClientOrder(generics.ListCreateAPIView):
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.request.method == 'list':
             return OrderGetClientSerializer
-        if self.action == 'create':
-            return OrderAddClientSerializer
         return OrderAddClientSerializer
     
     def list(self, request):
@@ -49,11 +47,13 @@ class GetAddClientOrder(generics.ListCreateAPIView):
         })
     
     def create(self,request):
-        queryset = Orders.objects.all()
         serializer_class = OrderAddClientSerializer
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
         return Response({
             'status': 'Ok',
-            'payload': serializer_class.data
+            'payload': serializer.data
         })
 
 

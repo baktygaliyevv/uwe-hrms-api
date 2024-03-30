@@ -158,10 +158,13 @@ class OrderAddClientSerializer(serializers.ModelSerializer):
     email = serializers.CharField(allow_null = True)
     first_name = serializers.CharField(required=True)
     last_name= serializers.CharField(required=True)
+    created_at = serializers.DateTimeField(required = False)
+    user_id = serializers.IntegerField(required=False)
+
 
     class Meta:
         model = Orders
-        fields = ['table_id','promocode_id','items','email','first_name','last_name']
+        fields = ['table_id','promocode_id','items','email','first_name','last_name','created_at','user_id']
 
     def create(self, request, validated_data):
         if validated_data.get('email')==None:
@@ -177,9 +180,9 @@ class OrderAddClientSerializer(serializers.ModelSerializer):
             validated_data['user_id'] = UserSerializer(obj.user).data.get('id')
         else:
             user = Users.objects.create(
-                first_name = validated_data.get('first_name'),
-                last_name = validated_data.get('last_name'),
-                email = validated_data.get('email'),
+                first_name = validated_data.pop('first_name'),
+                last_name = validated_data.pop('last_name'),
+                email = validated_data.pop('email'),
                 hash = None,
                 salt = None,
                 role = 'client',
@@ -187,12 +190,10 @@ class OrderAddClientSerializer(serializers.ModelSerializer):
             )
             validated_data['user_id'] = user.objects.get('id')
 
+        validated_data['created_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         items_data = validated_data.pop('items')
         order = Orders.objects.create(**validated_data)
         for menu_data in items_data:
+            menu_data['menu_id'] = menu_data.pop('item_id')
             OrderMenu.objects.create(order=order, **menu_data)
-        order_return_data = OrderGetSerializer(instance=order)
-        return Response({
-                'status':'Ok', 
-                'payload': order_return_data
-            })
+        return order
