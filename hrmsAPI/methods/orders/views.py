@@ -5,12 +5,12 @@ from ...models import Orders, OrderMenu, Menu, UserTokens
 from .serializers import OrderGetSerializer, OrderMenuAddSerializer, OrderAddSerializer, MenuSerializer, OrderAddClientSerializer, OrderMenuEditDeleteSerializer, MultipleFieldLookupMixin, OrderEditDeleteSerializer, OrderGetClientSerializer, UserSerializer
 
 class GetAddOrder(generics.ListCreateAPIView):
+    
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.request.method == "list":
             return OrderGetSerializer
-        if self.action == 'create':
-            return OrderAddSerializer
         return OrderAddSerializer
+
     
     def list(self, request):
         queryset = Orders.objects.all()
@@ -20,12 +20,14 @@ class GetAddOrder(generics.ListCreateAPIView):
             'payload': serializer_class.data
         })
     
-    def create(self,request):
-        queryset = Orders.objects.all()
-        serializer_class = OrderAddSerializer
+    def create(self,request, *args, **kwargs):
+        serializer_class = OrderAddSerializer()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
         return Response({
             'status': 'Ok',
-            'payload': serializer_class.data
+            'payload': serializer.data
         })
 
 class GetAddClientOrder(generics.ListCreateAPIView):

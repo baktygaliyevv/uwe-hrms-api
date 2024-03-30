@@ -7,6 +7,7 @@ from ..tables.serializers import  TableSerializer
 from ..promocodes.serializers import  PromocodeSerializer
 from ..users.serializers import UserSerializer
 from ..menu.serializers import MenuSerializer
+from datetime import datetime
 
 class OrderMenuAddSerializer(serializers.ModelSerializer):
     
@@ -85,21 +86,20 @@ class OrderAddSerializer(serializers.ModelSerializer):
     items = ItemSerializer(many = True)
 
     user_id = serializers.IntegerField(required=True)
+    created_at = serializers.DateTimeField(required = False)
 
     class Meta:
         model = Orders
-        fields = ['table_id','promocode_id','items','user_id']
+        fields = ['table_id','promocode_id','items','user_id','created_at']
             
     def create(self, validated_data):
         items_data = validated_data.pop('items')
+        validated_data['created_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         order = Orders.objects.create(**validated_data)
         for menu_data in items_data:
+            menu_data['menu_id'] = menu_data.pop('item_id')
             OrderMenu.objects.create(order=order, **menu_data)
-        order_return_data = OrderGetSerializer(instance=order)
-        return Response({
-                'status':'Ok', 
-                'payload': order_return_data
-            })  
+        return order
     
 class OrderEditDeleteSerializer(serializers.ModelSerializer):
 
