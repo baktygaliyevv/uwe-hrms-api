@@ -155,7 +155,7 @@ class OrderAddClientSerializer(serializers.ModelSerializer):
 
     items = ItemSerializer(many = True)
 
-    email = serializers.CharField(allow_null = True)
+    email = serializers.CharField(allow_null = True, required = False)
     first_name = serializers.CharField(required=True)
     last_name= serializers.CharField(required=True)
     created_at = serializers.DateTimeField(required = False)
@@ -166,7 +166,9 @@ class OrderAddClientSerializer(serializers.ModelSerializer):
         model = Orders
         fields = ['table_id','promocode_id','items','email','first_name','last_name','created_at','user_id']
 
-    def create(self, request, validated_data):
+    def create(self, validated_data):
+        request = self.context.get('request')
+
         if validated_data.get('email')==None:
             flag = False
         else:
@@ -175,9 +177,13 @@ class OrderAddClientSerializer(serializers.ModelSerializer):
             
         if(not flag and not flag2):
             return Response({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_400_BAD_REQUEST)
-        elif(not flag and flag2 or flag and flag2):
+        elif((not flag and flag2) or (flag and flag2)):
             obj = UserTokens.objects.get(token=request.COOKIES['token'])
             validated_data['user_id'] = UserSerializer(obj.user).data.get('id')
+            validated_data.pop('first_name')
+            validated_data.pop('last_name')
+            if validated_data.get('email')!= None:
+                validated_data.pop('email')
         else:
             user = Users.objects.create(
                 first_name = validated_data.pop('first_name'),
