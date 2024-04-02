@@ -19,6 +19,21 @@ class AddDelivery(generics.CreateAPIView):
     queryset = Deliveries.objects.all()
     serializer_class = DeliveryCreateUpdateSerializer
 
+class GetDeliveryByUserId(generics.ListAPIView):
+    serializer_class = DeliveryReadSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')  # Получаем user_id из URL
+        return Deliveries.objects.filter(user__id=user_id)
+    
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer_class = DeliveryReadSerializer(queryset, many=True)
+        return Response({
+            'status': 'Ok',
+            'payload': serializer_class.data
+        })
+
 class AddUiClientDelivery(generics.CreateAPIView):
     queryset = Deliveries.objects.all()
     serializer_class = DeliveryUISerializer

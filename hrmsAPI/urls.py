@@ -25,7 +25,7 @@ from .methods.tables.views import GetAllTable, EditDeleteTable
 from .methods.orders.views import GetOrder, EditDeleteOrder, AddOrder, AddOrderMenu, EditOrderMenu, DeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
 from .methods.auth.views import AuthView, AuthLoginView
-from .methods.delivery.views import GetDeliveries, AddDelivery, EditDelivery, DeleteDelivery, AddUiClientDelivery
+from .methods.delivery.views import GetDeliveries, AddDelivery, EditDelivery, DeleteDelivery, AddUiClientDelivery, GetDeliveryByUserId
 # FIXME that's not ok :(
 API_BASE_URL = 'api/v1/'
 
@@ -81,6 +81,7 @@ urlpatterns = [
     #deliveries
     path(f'{API_BASE_URL}deliveries',GetDeliveries.as_view(),name='get-delivery'),
     path(f'{API_BASE_URL}deliveries', AddDelivery.as_view(),name='add-delivery'),
+    path(f'{API_BASE_URL}deliveries/client/<int:user_id>', GetDeliveryByUserId.as_view(),name='deliveries-by-user'),    
     path(f'{API_BASE_URL}deliveries/client', AddUiClientDelivery.as_view(),name='add-ui-delivery'),
     path(f'{API_BASE_URL}deliveries/<int:id>', EditDelivery.as_view(), name='edit-delivery'),
     path(f'{API_BASE_URL}deliveries/<int:id>', DeleteDelivery.as_view(), name='delete-delivery'),

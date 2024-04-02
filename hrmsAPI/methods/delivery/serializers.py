@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ...models import Deliveries, DeliveryMenu, Users, Restaurants, Promocodes
+from ...models import Deliveries, DeliveryMenu, Users, Restaurants, Promocodes, Menu
 from ..menu.serializers import MenuSerializer
 from ..users.serializers import UserSerializer
 from ..promocodes.serializers import PromocodeSerializer
@@ -16,7 +16,7 @@ class DeliveryUISerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
     items = serializers.SerializerMethodField()
-    #FIXME вопрос с юзер токеном
+    #FIXME вопрос
     def get_items(self, obj):
         delivery_menus = DeliveryMenu.objects.filter(delivery=obj).select_related('menu')
         items_data = []
@@ -51,10 +51,11 @@ class DeliveryCreateUpdateSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=Users.objects.all())
     promocode = serializers.PrimaryKeyRelatedField(queryset=Promocodes.objects.all())
     restaurant = serializers.PrimaryKeyRelatedField(queryset=Restaurants.objects.all())
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.all())
     items = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Deliveries
-        fields = ['id', 'user', 'restaurant', 'promocode', 'address', 'created_at', 'status', 'items'] 
+        fields = ['id', 'user', 'restaurant', 'promocode', 'address', 'created_at', 'status', 'items', 'menu'] 
     
     def get_items(self, obj):
         delivery_menus = DeliveryMenu.objects.filter(delivery=obj).select_related('menu')
