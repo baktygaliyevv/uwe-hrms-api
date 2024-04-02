@@ -16,7 +16,7 @@ class DeliveryUISerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
     items = serializers.SerializerMethodField()
-    #FIXME вопрос
+    #FIXME вопрос с юзер токеном
     def get_items(self, obj):
         delivery_menus = DeliveryMenu.objects.filter(delivery=obj).select_related('menu')
         items_data = []

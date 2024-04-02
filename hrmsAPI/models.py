@@ -5,6 +5,7 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+from django.utils import timezone
 from django.db import models
 import hashlib
 
@@ -51,6 +52,9 @@ class EmailCodes(models.Model):
     class Meta:
         managed = False
         db_table = 'email_codes'
+
+    def is_valid(self):
+        return self.expiration_date > timezone.now()
 
 
 class Menu(models.Model):
