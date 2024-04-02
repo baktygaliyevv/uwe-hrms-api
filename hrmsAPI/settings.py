@@ -56,7 +56,10 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'hrmsAPI.middleware.ignore_is_active.CustomUserModelBackend',
+    ),
 }
 
 SPECTACULAR_SETTINGS = {
@@ -74,7 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'hrmsAPI.middleware.middleware.TokenMiddleware'
+    'hrmsAPI.middleware.middleware.auth_middleware'
     ]
 
 ROOT_URLCONF = 'hrmsAPI.urls'
