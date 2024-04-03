@@ -55,17 +55,6 @@ INSTALLED_APPS = [
     'hrmsAPI'
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
-}
-
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'hrmsAPI',
-    'DESCRIPTION': 'Our api description, dont know what to write here',
-    'VERSION': '1.0.0',
-    'SCHEMA_PATH_PREFIX': os.getenv('BASE_URL'),
-}
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -74,8 +63,22 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'hrmsAPI.middleware.middleware.TokenMiddleware'
+    'hrmsAPI.middleware.middleware.auth_middleware',
     ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'hrmsAPI.middleware.ignore_is_active.CustomUserModelBackend',
+    ),
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'hrmsAPI',
+    'DESCRIPTION': 'Our api description, dont know what to write here',
+    'VERSION': '1.0.0',
+    'SCHEMA_PATH_PREFIX': os.getenv('BASE_URL'),
+}
 
 ROOT_URLCONF = 'hrmsAPI.urls'
 
