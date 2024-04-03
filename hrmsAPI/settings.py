@@ -55,6 +55,17 @@ INSTALLED_APPS = [
     'hrmsAPI'
 ]
 
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'hrmsAPI.middleware.middleware.auth_middleware',
+    ]
+
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -68,17 +79,6 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SCHEMA_PATH_PREFIX': os.getenv('BASE_URL'),
 }
-
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'hrmsAPI.middleware.middleware.auth_middleware'
-    ]
 
 ROOT_URLCONF = 'hrmsAPI.urls'
 

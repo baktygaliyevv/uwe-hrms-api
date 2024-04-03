@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponse
-from .methods.users.views import AddUser, GetAllUsers, EditUser, DeleteUser
+from .methods.users.views import UserListCreateAPIView, EditDeleteUser
 from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories
 from .methods.products.views import GetProducts, AddProduct, DeleteProduct, EditProduct
 from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode, GetSpecificPromocode
@@ -32,10 +32,8 @@ API_BASE_URL = 'api/v1/'
 
 urlpatterns = [
     #users
-    path(f'{API_BASE_URL}users', GetAllUsers.as_view(), name='get-users'),
-    path(f'{API_BASE_URL}users', AddUser.as_view(), name='add-users'),
-    path(f'{API_BASE_URL}users/<int:id>', EditUser.as_view(), name='edit-user'),
-    path(f'{API_BASE_URL}users/<int:id>/delete', DeleteUser.as_view(), name='delete-user'),
+    path(f'{API_BASE_URL}users', UserListCreateAPIView.as_view(), name='get-users'),
+    path(f'{API_BASE_URL}users/<int:id>', EditDeleteUser.as_view(), name='edit-user'),
 
     #menu
     path(f'{API_BASE_URL}menu', GetMenuItems.as_view(), name='get-menu-item'),
