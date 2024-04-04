@@ -1,36 +1,30 @@
 from rest_framework import generics, status
-from rest_framework.views import APIView
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from ...models import Orders, OrderMenu, Menu, UserTokens
 from .serializers import OrderGetSerializer, OrderMenuAddSerializer, OrderAddSerializer, MenuSerializer, OrderAddClientSerializer, OrderMenuEditDeleteSerializer, MultipleFieldLookupMixin, OrderEditDeleteSerializer, OrderGetClientSerializer, UserSerializer
 
-class GetAddOrder(generics.ListCreateAPIView):
+class GetAddOrder(ListCreateAPIView):
+    queryset = Orders.objects.all()
     
     def get_serializer_class(self):
-        if self.request.method == "list":
+        if self.request.method == "GET":
             return OrderGetSerializer
         return OrderAddSerializer
-
     
-    def list(self, request):
-        queryset = Orders.objects.all()
-        serializer_class = OrderGetSerializer(queryset, many=True)
-        return Response({
-            'status': 'Ok',
-            'payload': serializer_class.data
-        })
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = OrderGetSerializer(queryset, many=True)
+        return Response({'status': 'Ok', 'payload': serializer.data})
     
-    def create(self,request, *args, **kwargs):
-        serializer_class = OrderAddSerializer()
-        serializer = self.get_serializer(data=request.data)
+    def create(self, request, *args, **kwargs):
+        serializer = OrderAddSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response({
-            'status': 'Ok',
-            'payload': serializer.data
-        })
+        order = serializer.save()
+        order_serializer = OrderGetSerializer(order)
+        return Response({'status': 'Ok', 'payload': order_serializer.data}, status=status.HTTP_201_CREATED)
 
-class GetAddClientOrder(generics.ListCreateAPIView):
+class GetAddClientOrder(ListCreateAPIView):
     def get_serializer_class(self):
         if self.request.method == 'list':
             return OrderGetClientSerializer
@@ -46,16 +40,12 @@ class GetAddClientOrder(generics.ListCreateAPIView):
             'payload': serializer_class.data
         })
     
-    def create(self,request):
-        serializer_class = OrderAddClientSerializer
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response({
-            'status': 'Ok',
-            'payload': serializer.data
-        })
-
+    def create(self, request, *args, **kwargs):
+            serializer = OrderAddClientSerializer(data=request.data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            order = serializer.save()
+            order_serializer = OrderGetSerializer(order)
+            return Response({'status': 'Ok', 'payload': order_serializer.data}, status=status.HTTP_201_CREATED)
 
 class EditDeleteOrder(generics.RetrieveUpdateDestroyAPIView):
     queryset = Orders.objects.all()
@@ -73,8 +63,6 @@ class EditDeleteOrder(generics.RetrieveUpdateDestroyAPIView):
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response({'status': 'Ok'})
-
-
 
 class EditDeleteOrderMenu(MultipleFieldLookupMixin,generics.RetrieveUpdateDestroyAPIView):
     queryset = OrderMenu.objects.all()
@@ -110,17 +98,21 @@ class AddOrderMenu(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         order_id = self.kwargs.get('order_id')
-        serializer = self.get_serializer(data=request.data)
+        data = request.data.copy()
+        data['menu'] = data.pop('item_id')
+        serializer = self.get_serializer(data=data)
+
         if serializer.is_valid():
-            serializer.save(order_id = order_id)
-            menu_id = serializer.validated_data.get('menu_id')
-            menu = Menu.objects.get(pk=menu_id)
-            item_serializer = MenuSerializer(menu)
+            serializer.save(order=order_id)
+            item = Menu.objects.get(pk=serializer.validated_data['menu'])
+            item_serializer = MenuSerializer(item)
             return_data = {
                 'item': item_serializer.data,
-                'quantity': serializer.validated_data.get('quantity')
+                'quantity': serializer.validated_data['quantity']
             }
             return Response({
-                'status':'Ok', 
+                'status': 'Ok',
                 'payload': return_data
-            })        
+            }, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

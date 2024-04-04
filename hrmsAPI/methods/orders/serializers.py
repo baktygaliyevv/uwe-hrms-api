@@ -7,20 +7,20 @@ from ..tables.serializers import  TableSerializer
 from ..promocodes.serializers import  PromocodeSerializer
 from ..users.serializers import UserSerializer
 from ..menu.serializers import MenuSerializer
-from datetime import datetime
+from django.utils import timezone
 
 class OrderMenuAddSerializer(serializers.ModelSerializer):
-    
-    item = MenuSerializer(read_only=True,many=True)
-
-    menu_id = serializers.IntegerField()
+    item = MenuSerializer(read_only=True, many=True)
+    item_id = serializers.PrimaryKeyRelatedField(
+        queryset=Menu.objects.all(),
+    )
 
     class Meta:
         model = OrderMenu
-        fields = ['item','menu_id','quantity']
+        fields = ['item', 'item_id', 'quantity']
+
 
 class OrderMenuEditDeleteSerializer(serializers.ModelSerializer):
-
     quantity = serializers.IntegerField()
 
     class Meta:
@@ -29,32 +29,25 @@ class OrderMenuEditDeleteSerializer(serializers.ModelSerializer):
 
 class MultipleFieldLookupMixin(object):
     def get_object(self):
-        queryset = self.get_queryset()             # Get the base queryset
-        queryset = self.filter_queryset(queryset)  # Apply any filter backends
+        queryset = self.get_queryset()            
+        queryset = self.filter_queryset(queryset) 
         filter = {}
         for field in self.lookup_fields:
-            try:                                  # Get the result with one or more fields.
+            try:                                 
                 filter[field] = self.kwargs[field]
             except Exception:
                 pass
         return get_object_or_404(queryset, **filter)
 
-
-
 class OrderGetSerializer(serializers.ModelSerializer):
-
     user = UserSerializer(read_only=True)
-
     table = TableSerializer(read_only=True)
-
     promocode = PromocodeSerializer(read_only=True)
-
     items = serializers.SerializerMethodField()
 
     class Meta:
         model = Orders
         fields = ['id','user','table','promocode','created_at','complete_at','items']
-
 
     def get_items(self, obj):
         menus_ids = OrderMenu.objects.filter(order=obj).values_list('menu',flat=True)
@@ -69,22 +62,14 @@ class OrderGetSerializer(serializers.ModelSerializer):
             items_data.append(item_data)
         return items_data
 
-
-
 class ItemSerializer(serializers.Serializer):
-
     item_id = serializers.IntegerField(required=True)
-
     quantity = serializers.IntegerField(required=True)
 
 class OrderAddSerializer(serializers.ModelSerializer):
-
     table_id = serializers.IntegerField(required=True)
-
     promocode_id = serializers.CharField(required=True)
-
     items = ItemSerializer(many = True)
-
     user_id = serializers.IntegerField(required=True)
     created_at = serializers.DateTimeField(required = False)
 
@@ -94,15 +79,14 @@ class OrderAddSerializer(serializers.ModelSerializer):
             
     def create(self, validated_data):
         items_data = validated_data.pop('items')
-        validated_data['created_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        validated_data['created_at'] = timezone.now()
         order = Orders.objects.create(**validated_data)
-        for menu_data in items_data:
-            menu_data['menu_id'] = menu_data.pop('item_id')
-            OrderMenu.objects.create(order=order, **menu_data)
+        for item_data in items_data:
+            menu_id = item_data.pop('item_id')
+            OrderMenu.objects.create(order=order, menu_id=menu_id, **item_data)
         return order
     
 class OrderEditDeleteSerializer(serializers.ModelSerializer):
-
     user_id = serializers.IntegerField(allow_null=True)
     table_id = serializers.IntegerField()
     promocode_id = serializers.CharField(allow_null=True)
@@ -121,13 +105,9 @@ class OrderEditDeleteSerializer(serializers.ModelSerializer):
                 'status':'Ok', 
             }) 
 
-
 class OrderGetClientSerializer(serializers.ModelSerializer):
-
     table = TableSerializer(read_only=True)
-
     promocode = PromocodeSerializer(read_only=True)
-
     items = serializers.SerializerMethodField()
 
     class Meta:
@@ -147,20 +127,15 @@ class OrderGetClientSerializer(serializers.ModelSerializer):
             items_data.append(item_data)
         return items_data
 
-
 class OrderAddClientSerializer(serializers.ModelSerializer):
     table_id = serializers.IntegerField(required=True)
-
     promocode_id = serializers.CharField(required=True)
-
     items = ItemSerializer(many = True)
-
     email = serializers.CharField(allow_null = True, required = False)
     first_name = serializers.CharField(required=True)
     last_name= serializers.CharField(required=True)
     created_at = serializers.DateTimeField(required = False)
     user_id = serializers.IntegerField(required=False)
-
 
     class Meta:
         model = Orders
@@ -196,10 +171,10 @@ class OrderAddClientSerializer(serializers.ModelSerializer):
             )
             validated_data['user_id'] = user.objects.get('id')
 
-        validated_data['created_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        validated_data['created_at'] = timezone.now()
         items_data = validated_data.pop('items')
         order = Orders.objects.create(**validated_data)
-        for menu_data in items_data:
-            menu_data['menu_id'] = menu_data.pop('item_id')
-            OrderMenu.objects.create(order=order, **menu_data)
+        for item_data in items_data:
+            menu_id = item_data.pop('item_id')
+            OrderMenu.objects.create(order=order, menu_id=menu_id, **item_data)
         return order
