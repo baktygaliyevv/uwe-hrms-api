@@ -11,7 +11,7 @@ def unauthorized_response(message):
 def auth_middleware(get_response):
     def middleware(request):
         url_name = resolve(request.path_info).url_name
-        open_paths = ['auth-login', 'auth-signup', 'auth-verify']
+        open_paths = ['auth-login', 'auth-signup', 'auth-verify', 'get-restaurants', 'get-tables', 'get-menu-item', 'get-menu-categories', 'get-add-client-order', 'add-ui-delivery', 'get-specific-promocode']
 
         if url_name in open_paths:
             return get_response(request)
@@ -22,13 +22,11 @@ def auth_middleware(get_response):
             'edit-user': ['admin'],  
             'delete-user': ['admin'],  
 
-            'get-menu-item': ['admin', 'manager'],
             'add-menu-item': ['admin'], 
             'edit-menu-item': ['admin'], 
             'delete-menu-item': ['admin'], 
             'add-menu-product': ['admin'], 
             'delete-menu-product': ['admin'], 
-            'get-menu-categories': ['admin'], 
             'add-menu-category': ['admin'], 
 
             'get-products': ['admin', 'manager'], 
@@ -39,9 +37,7 @@ def auth_middleware(get_response):
             'get-promocodes': ['admin', 'manager'],  
             'add-promocode': ['admin', 'manager'],  
             'delete-promocode': ['admin', 'manager'],  
-            'get-specific-promocode': ['admin', 'manager'],  
 
-            'get-tables': ['admin', 'manager'],  
             'add-tables': ['admin', 'manager'], 
             'edit-delete-table': ['admin', 'manager'],  
 
@@ -52,7 +48,6 @@ def auth_middleware(get_response):
             'edit-order-menu-item': ['admin', 'manager', 'staff', 'chef'],
             'delete-order-menu-item': ['admin', 'manager', 'staff', 'chef'],
 
-            'get-restaurants': ['admin', 'manager'], 
             'delete-restaurant': ['admin'],  
 
             'get-delivery': ['admin', 'manager', 'staff', 'chef'],
