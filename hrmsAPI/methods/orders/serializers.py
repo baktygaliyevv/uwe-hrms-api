@@ -10,9 +10,7 @@ from ..menu.serializers import MenuSerializer
 from django.utils import timezone
 
 class OrderMenuAddSerializer(serializers.ModelSerializer):
-
     item = MenuSerializer(read_only=True,many=True)
-
     item_id = serializers.IntegerField()
 
     class Meta:
