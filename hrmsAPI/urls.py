@@ -22,7 +22,7 @@ from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteM
 from .methods.products.views import GetProducts, AddProduct, DeleteProduct, EditProduct
 from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode, GetSpecificPromocode
 from .methods.tables.views import EditDeleteTable, GetAllTables, AddTable
-from .methods.orders.views import GetOrder, EditDeleteOrder, AddOrder, AddOrderMenu, EditOrderMenu, DeleteOrderMenu
+from .methods.orders.views import GetAddOrder, GetAddClientOrder, EditDeleteOrder, AddOrderMenu, EditDeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
 from .methods.auth.views import AuthView, AuthLoginView, AuthSignupView, AuthVerifyView
 from .methods.delivery.views import GetDeliveries, AddDelivery, EditDelivery, DeleteDelivery, AddUiClientDelivery
@@ -69,12 +69,11 @@ urlpatterns = [
     path(f'{API_BASE_URL}auth/verify', AuthVerifyView.as_view(), name='auth-verify'),
 
     #orders
-    path(f'{API_BASE_URL}orders', GetOrder.as_view(),name='get-orders'),
-    path(f'{API_BASE_URL}orders', AddOrder.as_view(),name='add-orders'),
+    path(f'{API_BASE_URL}orders', GetAddOrder.as_view(),name='get-add-orders'),
+    path(f'{API_BASE_URL}orders/client', GetAddClientOrder.as_view(),name='get-add-client-order'),
     path(f'{API_BASE_URL}orders/<int:id>', EditDeleteOrder.as_view(),name='edit-delete-order'),
-    path(f'{API_BASE_URL}orders/<int:id>/items', AddOrderMenu.as_view(),name='add-order-menu-items'),
-    path(f'{API_BASE_URL}orders/<int:id>/items/<int:itemId>',EditOrderMenu.as_view(),name='edit-order-menu-item'),
-    path(f'{API_BASE_URL}orders/<int:id>/items/<int:itemId>',DeleteOrderMenu.as_view(),name='delete-order-menu-item'),
+    path(f'{API_BASE_URL}orders/<int:order_id>/items', AddOrderMenu.as_view(),name='add-order-menu-items'),
+    path(f'{API_BASE_URL}orders/<int:order_id>/items/<int:menu_id>',EditDeleteOrderMenu.as_view(),name='edit-delete-order-menu-item'),
 
     #restaurants
     path(f'{API_BASE_URL}restaurants', GetRestaurant.as_view(),name='get-restaurants'),
