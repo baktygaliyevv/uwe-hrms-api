@@ -10,15 +10,14 @@ from ..menu.serializers import MenuSerializer
 from django.utils import timezone
 
 class OrderMenuAddSerializer(serializers.ModelSerializer):
-    item = MenuSerializer(read_only=True, many=True)
-    item_id = serializers.PrimaryKeyRelatedField(
-        queryset=Menu.objects.all(),
-    )
+
+    item = MenuSerializer(read_only=True,many=True)
+
+    item_id = serializers.IntegerField()
 
     class Meta:
         model = OrderMenu
-        fields = ['item', 'item_id', 'quantity']
-
+        fields = ['item','item_id','quantity']
 
 class OrderMenuEditDeleteSerializer(serializers.ModelSerializer):
     quantity = serializers.IntegerField()

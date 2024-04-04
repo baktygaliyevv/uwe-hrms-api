@@ -98,21 +98,18 @@ class AddOrderMenu(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         order_id = self.kwargs.get('order_id')
-        data = request.data.copy()
-        data['menu'] = data.pop('item_id')
-        serializer = self.get_serializer(data=data)
-
-        if serializer.is_valid():
-            serializer.save(order=order_id)
-            item = Menu.objects.get(pk=serializer.validated_data['menu'])
-            item_serializer = MenuSerializer(item)
-            return_data = {
-                'item': item_serializer.data,
-                'quantity': serializer.validated_data['quantity']
-            }
-            return Response({
-                'status': 'Ok',
-                'payload': return_data
-            }, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception = True)
+        serializer.validated_data['menu_id'] = serializer.validated_data.pop('item_id')
+        serializer.save(order_id = order_id)
+        menu_id = serializer.validated_data.get('menu_id')
+        menu = Menu.objects.get(pk=menu_id)
+        item_serializer = MenuSerializer(menu)
+        return_data = {
+            'item': item_serializer.data,
+            'quantity': serializer.validated_data.get('quantity')
+        }
+        return Response({
+            'status':'Ok', 
+            'payload': return_data
+        })
