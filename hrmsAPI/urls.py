@@ -26,7 +26,7 @@ from .methods.orders.views import GetAddOrder, GetAddClientOrder, EditDeleteOrde
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
 from .methods.auth.views import AuthView, AuthLoginView, AuthSignupView, AuthVerifyView
 from .methods.delivery.views import GetDeliveries, AddDelivery, EditDelivery, DeleteDelivery, AddUiClientDelivery
-from .methods.storage.views import GetRetaurantProducts, IncRestaurntProducts
+from .methods.storage.views import GetRetaurantProducts, IncRestaurntProducts, DecRestaurntProducts
 
 # FIXME that's not ok :(
 API_BASE_URL = 'api/v1/'
@@ -90,5 +90,5 @@ urlpatterns = [
     #storage
     path(f'{API_BASE_URL}storage', GetRetaurantProducts.as_view(), name = 'get-retaurant-products'),
     path(f'{API_BASE_URL}storage/increment', IncRestaurntProducts.as_view(), name = 'inc-restaurant-products'),
-
+    path(f'{API_BASE_URL}storage/decrement', DecRestaurntProducts.as_view(), name = 'dec-restaurant-products'),
 ]
