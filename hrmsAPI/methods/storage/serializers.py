@@ -10,5 +10,15 @@ class RestaurantProductsSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only = True)
     
     class Meta:
-        model=RestaurantProducts
-        fields=['restaurant','product','count']
+        model = RestaurantProducts
+        fields = ['restaurant','product','count']
+
+class RestaurantProductIncDecSerializer(serializers.ModelSerializer):
+
+    restaurant_id = serializers.IntegerField()
+
+    product_id = serializers.IntegerField()
+
+    class Meta:
+        model = RestaurantProducts
+        fields = ['restaurant_id','product_id']
