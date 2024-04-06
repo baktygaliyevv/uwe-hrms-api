@@ -3,7 +3,7 @@ from ...models import Promocodes
 from .serializers import PromocodeSerializer
 from rest_framework.response import Response
 
-class GetAllPromocodes(generics.ListAPIView):
+class GetAddPromocodes(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         queryset = Promocodes.objects.all()
         serializer_class = PromocodeSerializer(queryset, many=True)
@@ -11,6 +11,15 @@ class GetAllPromocodes(generics.ListAPIView):
             'status': 'Ok',
             'payload': serializer_class.data
         })
+    
+    def create(self, request, *args, **kwargs):
+        serializer = PromocodeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        promocode = serializer.save()
+        return Response({
+            'status': 'Ok',
+            'payload': PromocodeSerializer(promocode).data
+            })
 
 class AddPromocode(generics.CreateAPIView):
     queryset = Promocodes.objects.all()

@@ -20,7 +20,7 @@ from django.http import HttpResponse
 from .methods.users.views import UserListCreateAPIView, EditDeleteUser
 from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories
 from .methods.products.views import GetAddProducts, DeleteProduct, EditProduct
-from .methods.promocodes.views import GetAllPromocodes, AddPromocode, DeletePromocode, GetSpecificPromocode
+from .methods.promocodes.views import GetAddPromocodes, DeletePromocode, GetSpecificPromocode
 from .methods.tables.views import EditDeleteTable, GetAllTables, AddTable
 from .methods.orders.views import GetAddOrder, GetAddClientOrder, EditDeleteOrder, AddOrderMenu, EditDeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
@@ -51,8 +51,7 @@ urlpatterns = [
     path(f'{API_BASE_URL}products/<int:id>', DeleteProduct.as_view(), name='delete-product'),
 
     #promocodes
-    path(f'{API_BASE_URL}promocodes', GetAllPromocodes.as_view(), name='get-promocodes'),
-    path(f'{API_BASE_URL}promocodes', AddPromocode.as_view(), name='add-promocode'),
+    path(f'{API_BASE_URL}promocodes', GetAddPromocodes.as_view(), name='get-add-promocodes'),
     path(f'{API_BASE_URL}promocodes/<id>', DeletePromocode.as_view(), name='delete-promocode'),
     path(f'{API_BASE_URL}promocodes/<id>', GetSpecificPromocode.as_view(), name='get-specific-promocode'),
 
