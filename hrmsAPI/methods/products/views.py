@@ -7,6 +7,10 @@ class GetProducts(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         queryset = Products.objects.all()
         serializer_class = ProductSerializer(queryset, many=True)
+        for product in serializer_class.data:
+            product['vegan'] = bool(product['vegan'])
+            product['vegetarian'] = bool(product['vegetarian'])
+            product['gluten_free'] = bool(product['gluten_free'])
         return Response({
             'status': 'Ok',
             'payload': serializer_class.data
