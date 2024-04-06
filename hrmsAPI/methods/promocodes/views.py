@@ -21,9 +21,6 @@ class GetAddPromocodes(generics.ListCreateAPIView):
             'payload': PromocodeSerializer(promocode).data
             })
 
-class AddPromocode(generics.CreateAPIView):
-    queryset = Promocodes.objects.all()
-    serializer_class = PromocodeSerializer
 
 class DeletePromocode(generics.DestroyAPIView):
     queryset = Promocodes.objects.all()
