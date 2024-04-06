@@ -18,7 +18,10 @@ class GetAddProducts(generics.ListCreateAPIView):
         request.data['vegan'] = int(request.data['vegan'])
         request.data['vegetarian'] = int(request.data['vegetarian'])
         request.data['gluten_free'] = int(request.data['gluten_free'])
-        return super().create(request, *args, **kwargs)
+        return Response({
+            'status': 'Ok',
+            'payload': super().create(request, *args, **kwargs).data
+        })
     
 
 class EditProduct(generics.UpdateAPIView):
