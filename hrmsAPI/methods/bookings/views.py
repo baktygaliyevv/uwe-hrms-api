@@ -42,13 +42,6 @@ class DeleteBooking(generics.DestroyAPIView):
 class ClientGetAddBookings(generics.ListCreateAPIView):
     serializer_class = ClientBookingSerializer
 
-    # def get(self):
-    #     user_token = self.request.COOKIES.get('token')
-    #     return Response({
-    #         'status': 'Ok',
-    #         'payload': Bookings.objects.filter(user__usertokens__token=user_token,
-    #                                    user__usertokens__expiration_date__gt=timezone.now())
-    #     })
     def get_queryset(self):
         user_token = self.request.COOKIES.get('token')
         user_tokens = UserTokens.objects.filter(token=user_token, expiration_date__gt=timezone.now())
