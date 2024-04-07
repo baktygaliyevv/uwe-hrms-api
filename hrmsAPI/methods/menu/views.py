@@ -17,12 +17,7 @@ class AddMenuItem(generics.CreateAPIView):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
 
-class EditMenuItem(generics.UpdateAPIView):
-    queryset = Menu.objects.all()
-    serializer_class = MenuSerializer
-    lookup_field = 'id'
-
-class DeleteMenuItem(generics.DestroyAPIView):
+class EditDeleteMenuItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
     lookup_field = 'id'

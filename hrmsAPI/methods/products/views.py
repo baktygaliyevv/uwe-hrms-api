@@ -27,13 +27,7 @@ class GetAddProducts(generics.ListCreateAPIView):
             'payload': super().create(request, *args, **kwargs).data
         })
     
-
-class EditProduct(generics.UpdateAPIView):
-    queryset = Products.objects.all()
-    serializer_class = ProductSerializer
-    lookup_field = 'id'
-
-class DeleteProduct(generics.DestroyAPIView):
+class EditDeleteProduct(generics.RetrieveUpdateDestroyAPIView):
     queryset = Products.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'id'

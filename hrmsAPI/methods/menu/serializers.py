@@ -30,7 +30,6 @@ class MenuProductSerializer(serializers.ModelSerializer):
 
 class MenuSerializer(serializers.ModelSerializer):
     category = MenuCategorySerializer(read_only=True, source='menu_category')
-    # products = MenuProductSerializer(many=True, read_only=True, source='menu')
     products = serializers.SerializerMethodField()
 
     class Meta:
@@ -38,15 +37,12 @@ class MenuSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'category', 'price', 'products']
 
     def get_products(self, obj):
-        # Get all MenuProducts for this menu
         menu_products = MenuProducts.objects.filter(menu=obj)
-        # Now get the related Products from the menu_products query
         product_ids = menu_products.values_list('product', flat=True)
         products = Products.objects.filter(id__in=product_ids)
         return ProductSerializer(products, many=True).data
     
     def create(self, validated_data):
-        # здесь логика создания нового меню айтема и связывание продуктов с этим меню айтемом хз правильно ли сделал если че потом починим
         menu_products_data = validated_data.pop('menu_products')
         menu = Menu.objects.create(**validated_data)
         for product_data in menu_products_data:

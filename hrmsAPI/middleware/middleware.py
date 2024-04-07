@@ -17,36 +17,28 @@ def auth_middleware(get_response):
             return get_response(request)
 
         protected_paths = {
-            'get-users': ['admin'],  
-            'add-users': ['admin'],  
-            'edit-user': ['admin'],  
-            'delete-user': ['admin'],  
+            'get-add-users': ['admin'],  
+            'edit-delete-user': ['admin'],
 
             'add-menu-item': ['admin'], 
-            'edit-menu-item': ['admin'], 
-            'delete-menu-item': ['admin'], 
+            'edit-delete-menu-item': ['admin'], 
             'add-menu-product': ['admin'], 
             'delete-menu-product': ['admin'], 
             'add-menu-category': ['admin'], 
 
-            'get-products': ['admin', 'manager'], 
-            'add-product': ['admin'], 
-            'edit-product': ['admin'], 
-            'delete-product': ['admin'],  
+            'get-add-products': ['admin', 'manager'], 
+            'edit-delete-product': ['admin'],  
 
-            'get-promocodes': ['admin', 'manager'],  
-            'add-promocode': ['admin', 'manager'],  
+            'get-add-promocodes': ['admin', 'manager'],   
             'delete-promocode': ['admin', 'manager'],  
 
-            'add-tables': ['admin', 'manager'], 
+            'get-add-tables': ['admin', 'manager'], # гет тейблс надо будет вынести или хз к какому выводу придем то и будем делать, пока я закрыл
             'edit-delete-table': ['admin', 'manager'],  
 
-            'get-orders': ['admin', 'manager', 'staff', 'chef'],
-            'add-orders': ['admin', 'manager', 'staff', 'chef'],
+            'get-add-orders': ['admin', 'manager', 'staff', 'chef'],
             'edit-delete-order': ['admin', 'manager', 'staff', 'chef'],
             'add-order-menu-items': ['admin', 'manager', 'staff', 'chef'],
-            'edit-order-menu-item': ['admin', 'manager', 'staff', 'chef'],
-            'delete-order-menu-item': ['admin', 'manager', 'staff', 'chef'],
+            'edit-delete-order-menu-item': ['admin', 'manager', 'staff', 'chef'],
 
             'delete-restaurant': ['admin'],  
 
