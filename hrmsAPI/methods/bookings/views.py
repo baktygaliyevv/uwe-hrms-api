@@ -33,7 +33,7 @@ class EditDeleteBooking(generics.RetrieveUpdateDestroyAPIView):
     queryset = Bookings.objects.all()
     serializer_class = BookingSerializer
     lookup_field = 'id'
-
+    
 class ClientGetAddBookings(generics.ListCreateAPIView):
     serializer_class = ClientBookingSerializer
 
