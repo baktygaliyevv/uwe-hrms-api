@@ -11,42 +11,33 @@ def unauthorized_response(message):
 def auth_middleware(get_response):
     def middleware(request):
         url_name = resolve(request.path_info).url_name
-        open_paths = ['auth-login', 'auth-signup', 'auth-verify', 'get-restaurants', 'get-tables', 'get-menu-item', 'get-menu-categories', 'get-add-client-order', 'add-ui-delivery', 'get-specific-promocode']
+        open_paths = ['auth-login', 'auth-signup', 'auth-verify', 'get-restaurants', 'get-tables', 'get-menu-item', 'get-menu-categories', 'get-add-client-order', 'add-ui-delivery', 'get-specific-promocode', 'get-add-tables']
 
         if url_name in open_paths:
             return get_response(request)
 
         protected_paths = {
-            'get-users': ['admin'],  
-            'add-users': ['admin'],  
-            'edit-user': ['admin'],  
-            'delete-user': ['admin'],  
+            'get-add-users': ['admin'],  
+            'edit-delete-user': ['admin'],
 
             'add-menu-item': ['admin'], 
-            'edit-menu-item': ['admin'], 
-            'delete-menu-item': ['admin'], 
+            'edit-delete-menu-item': ['admin'], 
             'add-menu-product': ['admin'], 
             'delete-menu-product': ['admin'], 
             'add-menu-category': ['admin'], 
 
-            'get-products': ['admin', 'manager'], 
-            'add-product': ['admin'], 
-            'edit-product': ['admin'], 
-            'delete-product': ['admin'],  
+            'get-add-products': ['admin', 'manager'], 
+            'edit-delete-product': ['admin'],  
 
-            'get-promocodes': ['admin', 'manager'],  
-            'add-promocode': ['admin', 'manager'],  
+            'get-add-promocodes': ['admin', 'manager'],   
             'delete-promocode': ['admin', 'manager'],  
 
-            'add-tables': ['admin', 'manager'], 
             'edit-delete-table': ['admin', 'manager'],  
 
-            'get-orders': ['admin', 'manager', 'staff', 'chef'],
-            'add-orders': ['admin', 'manager', 'staff', 'chef'],
+            'get-add-orders': ['admin', 'manager', 'staff', 'chef'],
             'edit-delete-order': ['admin', 'manager', 'staff', 'chef'],
             'add-order-menu-items': ['admin', 'manager', 'staff', 'chef'],
-            'edit-order-menu-item': ['admin', 'manager', 'staff', 'chef'],
-            'delete-order-menu-item': ['admin', 'manager', 'staff', 'chef'],
+            'edit-delete-order-menu-item': ['admin', 'manager', 'staff', 'chef'],
 
             'delete-restaurant': ['admin'],  
 

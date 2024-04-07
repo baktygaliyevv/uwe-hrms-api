@@ -18,8 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponse
 from .methods.users.views import UserListCreateAPIView, EditDeleteUser
-from .methods.menu.views import GetMenuItems, AddMenuItem, EditMenuItem, DeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories
-from .methods.products.views import GetAddProducts, DeleteProduct, EditProduct
+from .methods.menu.views import GetMenuItems, AddMenuItem, EditDeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories
+from .methods.products.views import GetAddProducts, EditDeleteProduct
 from .methods.promocodes.views import GetAddPromocodes, DeletePromocode, GetSpecificPromocode
 from .methods.tables.views import EditDeleteTable, GetAddTables
 from .methods.orders.views import GetAddOrder, GetAddClientOrder, EditDeleteOrder, AddOrderMenu, EditDeleteOrderMenu
@@ -34,23 +34,21 @@ API_BASE_URL = 'api/v1/'
 
 urlpatterns = [
     #users
-    path(f'{API_BASE_URL}users', UserListCreateAPIView.as_view(), name='get-users'),
-    path(f'{API_BASE_URL}users/<int:id>', EditDeleteUser.as_view(), name='edit-user'),
+    path(f'{API_BASE_URL}users', UserListCreateAPIView.as_view(), name='get-add-users'),
+    path(f'{API_BASE_URL}users/<int:id>', EditDeleteUser.as_view(), name='edit-delete-user'),
 
     #menu
     path(f'{API_BASE_URL}menu', GetMenuItems.as_view(), name='get-menu-item'),
     path(f'{API_BASE_URL}menu', AddMenuItem.as_view(), name='add-menu-item'),
-    path(f'{API_BASE_URL}menu/<int:id>', EditMenuItem.as_view(), name='edit-menu-item'),
-    path(f'{API_BASE_URL}menu/<int:id>', DeleteMenuItem.as_view(), name='delete-menu-item'),
+    path(f'{API_BASE_URL}menu/<int:id>', EditDeleteMenuItem.as_view(), name='edit-delete-menu-item'),
     path(f'{API_BASE_URL}menu/<int:id>/products', AddMenuProduct.as_view(), name='add-menu-product'),
     path(f'{API_BASE_URL}menu/<int:id>/products/<int:productId>', DeleteMenuProduct.as_view(), name='delete-menu-product'),
     path(f'{API_BASE_URL}menu/categories', GetMenuCategories.as_view(), name='get-menu-categories'),
     path(f'{API_BASE_URL}menu/categories', AddMenuCategory.as_view(), name='add-menu-category'),
 
     #products
-    path(f'{API_BASE_URL}products', GetAddProducts.as_view(), name='get-products'),
-    path(f'{API_BASE_URL}products/<int:id>', EditProduct.as_view(), name='edit-product'),
-    path(f'{API_BASE_URL}products/<int:id>', DeleteProduct.as_view(), name='delete-product'),
+    path(f'{API_BASE_URL}products', GetAddProducts.as_view(), name='get-add-products'),
+    path(f'{API_BASE_URL}products/<int:id>', EditDeleteProduct.as_view(), name='edit-delete-product'),
 
     #promocodes
     path(f'{API_BASE_URL}promocodes', GetAddPromocodes.as_view(), name='get-add-promocodes'),
