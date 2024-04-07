@@ -27,7 +27,7 @@ from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
 from .methods.auth.views import AuthView, AuthLoginView, AuthSignupView, AuthVerifyView
 from .methods.delivery.views import GetDeliveries, AddDelivery, EditDelivery, DeleteDelivery, AddUiClientDelivery
 from .methods.storage.views import GetRetaurantProducts, IncRestaurntProducts, DecRestaurntProducts
-from .methods.bookings.views import GetAddBookings, EditBooking, DeleteBooking, ClientGetAddBookings
+from .methods.bookings.views import GetAddBookings, EditDeleteBooking, ClientGetAddBookings
 
 # FIXME that's not ok :(
 API_BASE_URL = 'api/v1/'
@@ -92,7 +92,6 @@ urlpatterns = [
 
     #bookings
     path(f'{API_BASE_URL}bookings', GetAddBookings.as_view(), name = 'get-add-bookings'),
-    path(f'{API_BASE_URL}bookings/<int:id>', EditBooking.as_view(), name='edit-booking'),
-    path(f'{API_BASE_URL}bookings/<int:id>', DeleteBooking.as_view(), name='delete-booking'),
+    path(f'{API_BASE_URL}bookings/<int:id>', EditDeleteBooking.as_view(), name='edit-delete-booking'),
     path(f'{API_BASE_URL}bookings/client', ClientGetAddBookings.as_view(), name='client-booking'),
 ]

@@ -29,12 +29,7 @@ class GetAddBookings(generics.GenericAPIView):
             'errors': serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
 
-class EditBooking(generics.UpdateAPIView):
-    queryset = Bookings.objects.all()
-    serializer_class = BookingSerializer
-    lookup_field = 'id'
-
-class DeleteBooking(generics.DestroyAPIView):
+class EditDeleteBooking(generics.RetrieveUpdateDestroyAPIView):
     queryset = Bookings.objects.all()
     serializer_class = BookingSerializer
     lookup_field = 'id'
