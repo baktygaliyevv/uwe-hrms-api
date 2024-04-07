@@ -11,7 +11,7 @@ def unauthorized_response(message):
 def auth_middleware(get_response):
     def middleware(request):
         url_name = resolve(request.path_info).url_name
-        open_paths = ['auth-login', 'auth-signup', 'auth-verify', 'get-restaurants', 'get-tables', 'get-menu-item', 'get-menu-categories', 'get-add-client-order', 'add-ui-delivery', 'get-specific-promocode']
+        open_paths = ['auth-login', 'auth-signup', 'auth-verify', 'get-restaurants', 'get-tables', 'get-menu-item', 'get-menu-categories', 'get-add-client-order', 'add-ui-delivery', 'get-specific-promocode', 'get-add-tables']
 
         if url_name in open_paths:
             return get_response(request)
@@ -32,7 +32,6 @@ def auth_middleware(get_response):
             'get-add-promocodes': ['admin', 'manager'],   
             'delete-promocode': ['admin', 'manager'],  
 
-            'get-add-tables': ['admin', 'manager'], # гет тейблс надо будет вынести или хз к какому выводу придем то и будем делать, пока я закрыл
             'edit-delete-table': ['admin', 'manager'],  
 
             'get-add-orders': ['admin', 'manager', 'staff', 'chef'],
