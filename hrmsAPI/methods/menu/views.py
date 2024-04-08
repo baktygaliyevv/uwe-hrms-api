@@ -1,8 +1,9 @@
 from rest_framework import generics, status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from ...models import Menu, MenuProducts, MenuCategories
-from .serializers import MenuSerializer, MenuProductSerializer, MenuCategorySerializer
+from ...models import Menu, MenuProducts, MenuCategories, RestaurantProducts
+from .serializers import AvailableMenuSerializer, MenuSerializer, MenuProductSerializer, MenuCategorySerializer, UnavailableMenuSerializer
 
 class GetMenuItems(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
@@ -49,3 +50,32 @@ class GetMenuCategories(generics.ListAPIView):
 class AddMenuCategory(generics.CreateAPIView):
     queryset = MenuCategories.objects.all()
     serializer_class = MenuCategorySerializer
+
+@api_view(['GET'])
+def available_menu_items(request):
+    restaurant_id = request.query_params.get('restaurant_id')
+    if not restaurant_id:
+        return Response({'error': 'restaurant_id parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        restaurant_products = RestaurantProducts.objects.filter(restaurant_id=restaurant_id).values_list('product_id', flat=True)
+        menu_items = MenuProducts.objects.filter(product_id__in=restaurant_products).values_list('menu_id', flat=True).distinct()
+        available_menus = Menu.objects.filter(id__in=menu_items)
+        serializer = AvailableMenuSerializer(available_menus, many=True)
+        return Response({'status': 'OK', 'payload': serializer.data})
+    except Exception as e:
+        return Response({'status': 'Error', 'message': str(e)})
+
+@api_view(['GET'])
+def unavailable_menu_items(request):
+    restaurant_id = request.query_params.get('restaurant_id')
+    if not restaurant_id:
+        return Response({'error': 'restaurant_id parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        restaurant_products = RestaurantProducts.objects.filter(restaurant_id=restaurant_id).values_list('product_id', flat=True)
+        all_menu_items = Menu.objects.all()
+        menu_items = MenuProducts.objects.exclude(product_id__in=restaurant_products).values_list('menu_id', flat=True).distinct()
+        unavailable_menus = all_menu_items.exclude(id__in=menu_items)
+        serializer = UnavailableMenuSerializer(unavailable_menus, many=True)
+        return Response({'status': 'OK', 'payload': serializer.data})
+    except Exception as e:
+        return Response({'status': 'Error', 'message': str(e)})
