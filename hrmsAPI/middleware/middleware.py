@@ -11,7 +11,7 @@ def unauthorized_response(message):
 def auth_middleware(get_response):
     def middleware(request):
         url_name = resolve(request.path_info).url_name
-        open_paths = ['auth-login', 'auth-signup', 'auth-verify', 'get-restaurants', 'get-tables', 'get-menu-item', 'get-menu-categories', 'get-add-client-order', 'add-ui-delivery', 'get-specific-promocode', 'get-add-tables']
+        open_paths = ['auth-login', 'auth-signup', 'auth-verify', 'get-restaurants', 'get-tables', 'get-menu-item', 'get-menu-categories', 'get-add-client-order', 'add-ui-delivery', 'get-specific-promocode', 'get-add-tables', 'available-menu-items', 'unavailable-menu-items']
 
         if url_name in open_paths:
             return get_response(request)
@@ -25,8 +25,6 @@ def auth_middleware(get_response):
             'add-menu-product': ['admin'], 
             'delete-menu-product': ['admin'], 
             'add-menu-category': ['admin'],
-            'available-menu-items': ['admin'],
-            'unavailable-menu-items': ['admin'],
 
             'get-add-products': ['admin', 'manager'], 
             'edit-delete-product': ['admin'],  
