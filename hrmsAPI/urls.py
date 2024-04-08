@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponse
 from .methods.users.views import UserListCreateAPIView, EditDeleteUser
-from .methods.menu.views import GetMenuItems, AddMenuItem, EditDeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories
+from .methods.menu.views import GetMenuItems, AddMenuItem, EditDeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories, available_menu_items, unavailable_menu_items
 from .methods.products.views import GetAddProducts, EditDeleteProduct
 from .methods.promocodes.views import GetAddPromocodes, DeletePromocode, GetSpecificPromocode
 from .methods.tables.views import EditDeleteTable, GetAddTables
@@ -45,6 +45,8 @@ urlpatterns = [
     path(f'{API_BASE_URL}menu/<int:id>/products/<int:productId>', DeleteMenuProduct.as_view(), name='delete-menu-product'),
     path(f'{API_BASE_URL}menu/categories', GetMenuCategories.as_view(), name='get-menu-categories'),
     path(f'{API_BASE_URL}menu/categories', AddMenuCategory.as_view(), name='add-menu-category'),
+    path(f'{API_BASE_URL}menu/available', available_menu_items, name='available-menu-items'),
+    path(f'{API_BASE_URL}menu/unavailable', unavailable_menu_items, name='unavailable-menu-items'),
 
     #products
     path(f'{API_BASE_URL}products', GetAddProducts.as_view(), name='get-add-products'),

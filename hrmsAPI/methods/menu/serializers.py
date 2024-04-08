@@ -48,3 +48,13 @@ class MenuSerializer(serializers.ModelSerializer):
         for product_data in menu_products_data:
             MenuProducts.objects.create(menu=menu, **product_data)
         return menu
+
+class AvailableMenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Menu
+        fields = '__all__'
+
+class UnavailableMenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Menu
+        fields = '__all__'

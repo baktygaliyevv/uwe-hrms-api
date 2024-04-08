@@ -24,7 +24,9 @@ def auth_middleware(get_response):
             'edit-delete-menu-item': ['admin'], 
             'add-menu-product': ['admin'], 
             'delete-menu-product': ['admin'], 
-            'add-menu-category': ['admin'], 
+            'add-menu-category': ['admin'],
+            'available-menu-items': ['admin'],
+            'unavailable-menu-items': ['admin'],
 
             'get-add-products': ['admin', 'manager'], 
             'edit-delete-product': ['admin'],  
