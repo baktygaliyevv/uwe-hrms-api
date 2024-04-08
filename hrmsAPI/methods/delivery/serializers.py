@@ -1,11 +1,7 @@
 from rest_framework import serializers
-<<<<<<< Updated upstream
-from ...models import Deliveries, DeliveryMenu, Users, Restaurants, Promocodes, Menu
-=======
 from rest_framework.response import Response
 from rest_framework import status
 from ...models import Deliveries, DeliveryMenu, Users, Restaurants, Promocodes, Menu, UserTokens
->>>>>>> Stashed changes
 from ..menu.serializers import MenuSerializer
 from ..users.serializers import UserSerializer
 from ..promocodes.serializers import PromocodeSerializer
@@ -20,25 +16,26 @@ class DeliveryMenuSerializer(serializers.ModelSerializer):
         fields = ['id', 'delivery', 'menu', 'quantity']
 
 class DeliveryCreateUpdateSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=Users.objects.all())
-    promocode = serializers.PrimaryKeyRelatedField(queryset=Promocodes.objects.all())
-    restaurant = serializers.PrimaryKeyRelatedField(queryset=Restaurants.objects.all())
-    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.all())
-    items = serializers.SerializerMethodField(read_only=True)
+    restaurant_id = serializers.IntegerField(required=True)
+    promocode_id = serializers.CharField(required=True)
+    address = serializers.CharField(required=True)
+    items = ItemSerializer(many=True)
+    user_id = serializers.IntegerField(required=True)
+    created_at = serializers.DateTimeField(required = False)
+
     class Meta:
         model = Deliveries
-        fields = ['id', 'user', 'restaurant', 'promocode', 'address', 'created_at', 'status', 'items', 'menu'] 
+        fields = ['restaurant_id', 'promocode_id', 'address',  'items', 'created_at', 'user_id'] 
     
-    def get_items(self, obj):
-        delivery_menus = DeliveryMenu.objects.filter(delivery=obj).select_related('menu')
-        items_data = []
-        for delivery_menu in delivery_menus:
-            item_data = {
-                'item': MenuSerializer(delivery_menu.menu).data,
-                'quantity': delivery_menu.quantity
-            }
-            items_data.append(item_data)
-        return items_data
+    def create(self, validated_data):
+        items_data = validated_data.pop('items')
+        validated_data['created_at'] = timezone.now()
+        validated_data['status'] = 'new'
+        delivery = Deliveries.objects.create(**validated_data)
+        for item_data in items_data:
+            menu_id = item_data.pop('item_id')
+            DeliveryMenu.objects.create(delivery=delivery, menu_id=menu_id, **item_data)
+        return delivery
 
 class DeliveryReadSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -59,31 +56,11 @@ class DeliveryReadSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Deliveries
-        fields = ['id', 'user', 'restaurant', 'promocode', 'address', 'created_at', 'status', 'items']
-
-class DeliveryReadClientSerializer(serializers.ModelSerializer):
-    promocode = PromocodeSerializer(read_only=True)
-    restaurant = RestaurantSerializer(read_only=True)
-    items = serializers.SerializerMethodField(read_only=True)
-
-    def get_items(self, obj):
-        delivery_menus = DeliveryMenu.objects.filter(delivery=obj).select_related('menu')
-        items_data = []
-        for delivery_menu in delivery_menus:
-            item_data = {
-                'item': MenuSerializer(delivery_menu.menu).data,
-                'quantity': delivery_menu.quantity
-            }
-            items_data.append(item_data)
-        return items_data
-
-    class Meta:
-        model = Deliveries
-        fields = ['id', 'restaurant', 'promocode', 'address', 'created_at', 'status', 'items']
+        fields = ['id', 'restaurant', 'promocode', 'address', 'created_at', 'status', 'items', 'user']
 
 class DeliveryCreateUpdateClientSerilizer(serializers.ModelSerializer):
-    restaurant = serializers.CharField(reqiured=True)
-    promocode = serializers.CharField(required=True)
+    restaurant_id = serializers.IntegerField(required=True)
+    promocode_id = serializers.CharField(required=True)
     address = serializers.CharField(required=True)
     items = ItemSerializer(many = True)
     email = serializers.CharField(allow_null = True, required = False)
@@ -94,7 +71,7 @@ class DeliveryCreateUpdateClientSerilizer(serializers.ModelSerializer):
 
     class Meta:
         model = Deliveries
-        fields = ['restaurant', 'promocode', 'address', 'items', 'email', 'first_name', 'last_name', 'created_at']
+        fields = ['restaurant_id', 'promocode_id', 'address', 'items', 'email', 'first_name', 'last_name', 'created_at', 'user_id']
     
     def create(self, validated_data):
         request = self.context.get('request')
@@ -127,9 +104,50 @@ class DeliveryCreateUpdateClientSerilizer(serializers.ModelSerializer):
             validated_data['user_id'] = user.objects.get('id')
 
         validated_data['created_at'] = timezone.now()
+        validated_data['status'] = 'new'
         items_data = validated_data.pop('items')
-        order = Deliveries.objects.create(**validated_data)
+        delivery = Deliveries.objects.create(**validated_data)
         for item_data in items_data:
             menu_id = item_data.pop('item_id')
-            DeliveryMenu.objects.create(order=order, menu_id=menu_id, **item_data)
-        return order
+            DeliveryMenu.objects.create(delivery=delivery, menu_id=menu_id, **item_data)
+        return delivery
+
+class DeliveryReadClientSerializer(serializers.ModelSerializer):
+    promocode = PromocodeSerializer(read_only=True)
+    restaurant = RestaurantSerializer(read_only=True)
+    items = serializers.SerializerMethodField(read_only=True)
+
+    def get_items(self, obj):
+        delivery_menus = DeliveryMenu.objects.filter(delivery=obj).select_related('menu')
+        items_data = []
+        for delivery_menu in delivery_menus:
+            item_data = {
+                'item': MenuSerializer(delivery_menu.menu).data,
+                'quantity': delivery_menu.quantity
+            }
+            items_data.append(item_data)
+        return items_data
+
+    class Meta:
+        model = Deliveries
+        fields = ['id', 'restaurant', 'promocode', 'address', 'created_at', 'status', 'items']
+
+class DeliveryEditDeleteSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(allow_null=True)
+    restaurant_id = serializers.IntegerField(required=True)
+    promocode_id = serializers.CharField(required=True)
+    status = serializers.CharField(required=True)
+
+    class Meta:
+        model = Deliveries
+        fields = ['user_id','restaurant_id','promocode_id','status']
+    
+    def destroy(self, validated_data):
+        items_data = validated_data.pop('items')
+        order = Deliveries.objects.delete(**validated_data)
+        for menu_data in items_data:
+            DeliveryMenu.objects.delete(order=order, **menu_data)
+        return Response({
+                'status':'Ok', 
+            })
+    

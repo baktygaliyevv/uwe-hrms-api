@@ -25,11 +25,7 @@ from .methods.tables.views import EditDeleteTable, GetAllTables, AddTable
 from .methods.orders.views import GetAddOrder, GetAddClientOrder, EditDeleteOrder, AddOrderMenu, EditDeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
 from .methods.auth.views import AuthView, AuthLoginView, AuthSignupView, AuthVerifyView
-<<<<<<< Updated upstream
-from .methods.delivery.views import GetDeliveries, AddDelivery, EditDelivery, DeleteDelivery, AddUiClientDelivery, GetDeliveryByUserId
-=======
-from .methods.delivery.views import GetDeliveries, AddDelivery, EditDelivery, DeleteDelivery, GetAddClientDeliveries
->>>>>>> Stashed changes
+from .methods.delivery.views import GetAddDelivery, EditDeleteDelivery, GetAddClientDeliveries
 
 # FIXME that's not ok :(
 API_BASE_URL = 'api/v1/'
@@ -84,15 +80,8 @@ urlpatterns = [
     path(f'{API_BASE_URL}restaurants/<int:id>',DeleteRestaurant.as_view(),name='delete-restaurant'),
 
     #deliveries
-    path(f'{API_BASE_URL}deliveries',GetDeliveries.as_view(),name='get-delivery'),
-    path(f'{API_BASE_URL}deliveries', AddDelivery.as_view(),name='add-delivery'),
-<<<<<<< Updated upstream
-    path(f'{API_BASE_URL}deliveries/client/<int:user_id>', GetDeliveryByUserId.as_view(),name='deliveries-by-user'),    
-    path(f'{API_BASE_URL}deliveries/client', AddUiClientDelivery.as_view(),name='add-ui-delivery'),
-=======
-    path(f'{API_BASE_URL}deliveries/client', GetAddClientDeliveries.as_view(),name='add-ui-delivery'),
->>>>>>> Stashed changes
-    path(f'{API_BASE_URL}deliveries/<int:id>', EditDelivery.as_view(), name='edit-delivery'),
-    path(f'{API_BASE_URL}deliveries/<int:id>', DeleteDelivery.as_view(), name='delete-delivery'),
+    path(f'{API_BASE_URL}deliveries', GetAddDelivery.as_view(),name='get-add-delivery'),
+    path(f'{API_BASE_URL}deliveries/client', GetAddClientDeliveries.as_view(),name='get-add-client-delivery'),
+    path(f'{API_BASE_URL}deliveries/<int:id>', EditDeleteDelivery.as_view(), name='edit-delete-delivery'),
 
 ]
