@@ -24,17 +24,20 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class MenuProductSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)
+    product_id = serializers.PrimaryKeyRelatedField(queryset=Products.objects.all(), source='product', write_only=True)
+
     class Meta:
         model = MenuProducts
-        fields = ['product']
+        fields = ['product', 'product_id']
 
 class MenuSerializer(serializers.ModelSerializer):
     category = MenuCategorySerializer(read_only=True, source='menu_category')
     products = serializers.SerializerMethodField()
+    category_id = serializers.PrimaryKeyRelatedField(queryset=MenuCategories.objects.all(), source='menu_category', write_only=True)
 
     class Meta:
         model = Menu
-        fields = ['id', 'name', 'category', 'price', 'products']
+        fields = ['id', 'name', 'category', 'price', 'products', 'category_id']
 
     def get_products(self, obj):
         menu_products = MenuProducts.objects.filter(menu=obj)
@@ -48,6 +51,11 @@ class MenuSerializer(serializers.ModelSerializer):
         for product_data in menu_products_data:
             MenuProducts.objects.create(menu=menu, **product_data)
         return menu
+    
+    def update(self, instance, validated_data):
+        if 'menu_category' in validated_data:
+            instance.menu_category = validated_data.pop('menu_category')
+        return super(MenuSerializer, self).update(instance, validated_data)
 
 class AvailableMenuSerializer(serializers.ModelSerializer):
     class Meta:
