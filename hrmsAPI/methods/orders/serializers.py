@@ -126,7 +126,7 @@ class OrderGetClientSerializer(serializers.ModelSerializer):
 
 class OrderAddClientSerializer(serializers.ModelSerializer):
     table_id = serializers.IntegerField(required=True)
-    promocode_id = serializers.CharField(required=True)
+    promocode_id = serializers.CharField(allow_null = True, required=False)
     items = ItemSerializer(many = True)
     email = serializers.CharField(allow_null = True, required = False)
     first_name = serializers.CharField(required=True)
