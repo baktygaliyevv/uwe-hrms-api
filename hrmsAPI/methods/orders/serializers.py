@@ -148,7 +148,7 @@ class OrderAddClientSerializer(serializers.ModelSerializer):
         flag2 = 'token' in request.COOKIES
             
         if(not flag and not flag2):
-            return Response({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({})
         elif((not flag and flag2) or (flag and flag2)):
             obj = UserTokens.objects.get(token=request.COOKIES['token'])
             validated_data['user_id'] = UserSerializer(obj.user).data.get('id')
@@ -166,7 +166,7 @@ class OrderAddClientSerializer(serializers.ModelSerializer):
                 role = 'client',
                 verified = 0
             )
-            validated_data['user_id'] = user.objects.get('id')
+            validated_data['user_id'] = UserSerializer(user).data.get('id')
 
         validated_data['created_at'] = timezone.now()
         items_data = validated_data.pop('items')
