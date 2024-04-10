@@ -101,7 +101,7 @@ class DeliveryCreateUpdateClientSerilizer(serializers.ModelSerializer):
                 role = 'client',
                 verified = 0
             )
-            validated_data['user_id'] = user.objects.get('id')
+            validated_data['user_id'] = user.id
 
         validated_data['created_at'] = timezone.now()
         validated_data['status'] = 'new'

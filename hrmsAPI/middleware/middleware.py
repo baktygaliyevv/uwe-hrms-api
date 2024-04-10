@@ -11,7 +11,7 @@ def unauthorized_response(message):
 def auth_middleware(get_response):
     def middleware(request):
         url_name = resolve(request.path_info).url_name
-        open_paths = ['auth-login', 'auth-signup', 'auth-verify', 'get-restaurants', 'get-tables', 'get-menu-item', 'get-menu-categories', 'get-add-client-order', 'add-ui-delivery', 'get-specific-promocode']
+        open_paths = ['auth-login', 'auth-signup', 'auth-verify', 'get-restaurants', 'get-tables', 'get-menu-item', 'get-menu-categories', 'get-add-client-order', 'get-add-client-delivery', 'get-specific-promocode']
 
         if url_name in open_paths:
             return get_response(request)
@@ -50,10 +50,8 @@ def auth_middleware(get_response):
 
             'delete-restaurant': ['admin'],  
 
-            'get-delivery': ['admin', 'manager', 'staff', 'chef'],
-            'add-delivery': ['admin', 'manager', 'staff', 'chef'],
-            'edit-delivery': ['admin', 'manager', 'staff', 'chef'],
-            'delete-delivery': ['admin', 'manager', 'staff', 'chef'],
+            'get-add-delivery': ['admin', 'manager', 'staff', 'chef'],
+            'edit-delete-delivery': ['admin', 'manager', 'staff', 'chef'],
         }
 
         token = request.COOKIES.get('token')
