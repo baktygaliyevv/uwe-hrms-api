@@ -2,10 +2,9 @@ from rest_framework import generics, status
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from ...models import Deliveries, UserTokens
+from ...models import Deliveries, UserTokens, Users
 from .serializers import DeliveryReadSerializer, DeliveryCreateUpdateSerializer, DeliveryReadClientSerializer, DeliveryCreateUpdateClientSerilizer, DeliveryEditDeleteSerializer
 from ..users.serializers import UserSerializer
-from rest_framework.mixins import RetrieveModelMixin
 
 class GetAddDelivery(ListCreateAPIView):
     queryset = Deliveries.objects.all()
@@ -46,19 +45,6 @@ class EditDeleteDelivery(generics.RetrieveUpdateDestroyAPIView):
         self.perform_destroy(instance)
         return Response({'status': 'Ok'})
 
-class EditDelivery(RetrieveModelMixin, generics.UpdateAPIView):
-    queryset = Deliveries.objects.all()
-    serializer_class = DeliveryCreateUpdateSerializer
-    lookup_field = 'id'
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-class DeleteDelivery(generics.DestroyAPIView):
-    queryset = Deliveries.objects.all()
-    serializer_class = DeliveryCreateUpdateSerializer
-    lookup_field = 'id'
-
 class GetAddClientDeliveries(ListCreateAPIView):    
     def get_serializer_class(self):
         if self.request.method == 'list':
@@ -76,8 +62,16 @@ class GetAddClientDeliveries(ListCreateAPIView):
         })
     
     def create(self, request, *args, **kwargs):
-            serializer = DeliveryCreateUpdateClientSerilizer(data=request.data, context={'request': request})
-            serializer.is_valid(raise_exception=True)
-            order = serializer.save()
-            order_serializer = DeliveryReadSerializer(order)
-            return Response({'status': 'Ok', 'payload': order_serializer.data}, status=status.HTTP_201_CREATED)
+        email = request.data.get('email', None)
+
+        if not request.user.is_authenticated:
+            if not email:
+                return Response({'error': 'Email is required for unregistered users'}, status=status.HTTP_400_BAD_REQUEST)          
+            elif Users.objects.filter(email=email).exists():
+                return Response({'error': 'User with this email already exists. Please log in.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        serializer = DeliveryCreateUpdateClientSerilizer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        order = serializer.save()
+        order_serializer = DeliveryReadSerializer(order)
+        return Response({'status': 'Ok', 'payload': order_serializer.data}, status=status.HTTP_201_CREATED)
