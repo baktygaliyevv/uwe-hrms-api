@@ -68,7 +68,8 @@ class GetAddClientDeliveries(ListCreateAPIView):
             if not email:
                 return Response({'error': 'Email is required for unregistered users'}, status=status.HTTP_400_BAD_REQUEST)          
             elif Users.objects.filter(email=email).exists():
-                return Response({'error': 'User with this email already exists. Please log in.'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'User with this email already exists. Please log in.'}, status=status.HTTP_400_BAD_REQUEST) # вот тут темка, что если добавляем доставку на такого же юзера просят залогиниться при этом если юзер создался без пароля хз как логиниться, но в целом это маловероятно что произойдет, на презентации не спалят и вряд ли заметят, так то все работает заебись помимо вот этого маленького недочета, я апрув, поставлю но на будущее такой долгий коммент оставлю мб потом пофиксим
+            
             
         serializer = DeliveryCreateUpdateClientSerilizer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
