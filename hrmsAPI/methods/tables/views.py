@@ -3,16 +3,14 @@ from ...models import Tables
 from .serializers import TableSerializer
 from rest_framework.response import Response
 
-class GetAllTable(generics.ListCreateAPIView):
-    queryset = Tables.objects.all()
-    serializer_class = TableSerializer
-
 class EditDeleteTable(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tables.objects.all()
     serializer_class = TableSerializer
     lookup_field = 'id'
 
-class GetAllTables(generics.ListAPIView):
+class GetAddTables(generics.ListCreateAPIView):
+    serializer_class = TableSerializer
+
     def get(self, request, *args, **kwargs):
         queryset = Tables.objects.all()
         serializer_class = TableSerializer(queryset, many=True)
@@ -20,7 +18,9 @@ class GetAllTables(generics.ListAPIView):
             'status': 'Ok',
             'payload': serializer_class.data
         })
-
-class AddTable(generics.CreateAPIView):
-    queryset = Tables.objects.all()
-    serializer_class = TableSerializer
+    
+    def create(self, request, *args, **kwargs):
+        return Response({
+            'status': 'Ok',
+            'payload': super().create(request, *args, **kwargs).data
+        })

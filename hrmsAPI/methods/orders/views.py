@@ -43,9 +43,11 @@ class GetAddClientOrder(ListCreateAPIView):
     def create(self, request, *args, **kwargs):
             serializer = OrderAddClientSerializer(data=request.data, context={'request': request})
             serializer.is_valid(raise_exception=True)
+            if serializer is Response:
+                return Response({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_400_BAD_REQUEST)
             order = serializer.save()
             order_serializer = OrderGetSerializer(order)
-            return Response({'status': 'Ok', 'payload': order_serializer.data}, status=status.HTTP_201_CREATED)
+            return Response({'status': 'Ok', 'payload': order_serializer.data})
 
 class EditDeleteOrder(generics.RetrieveUpdateDestroyAPIView):
     queryset = Orders.objects.all()
