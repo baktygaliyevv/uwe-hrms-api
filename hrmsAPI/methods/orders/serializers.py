@@ -65,7 +65,7 @@ class ItemSerializer(serializers.Serializer):
 
 class OrderAddSerializer(serializers.ModelSerializer):
     table_id = serializers.IntegerField(required=True)
-    promocode_id = serializers.CharField(required=True)
+    promocode_id = serializers.CharField(allow_null=True, required=True)
     items = ItemSerializer(many = True)
     user_id = serializers.IntegerField(required=True)
     created_at = serializers.DateTimeField(required = False)
