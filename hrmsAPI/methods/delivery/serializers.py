@@ -17,10 +17,10 @@ class DeliveryMenuSerializer(serializers.ModelSerializer):
 
 class DeliveryCreateUpdateSerializer(serializers.ModelSerializer):
     restaurant_id = serializers.IntegerField(required=True)
-    promocode_id = serializers.CharField(required=True)
+    promocode_id = serializers.CharField(allow_null = True, required=False)
     address = serializers.CharField(required=True)
     items = ItemSerializer(many=True)
-    user_id = serializers.IntegerField(required=True)
+    user_id = serializers.IntegerField(allow_null = True, required=False)
     created_at = serializers.DateTimeField(required = False)
 
     class Meta:
@@ -60,7 +60,7 @@ class DeliveryReadSerializer(serializers.ModelSerializer):
 
 class DeliveryCreateUpdateClientSerilizer(serializers.ModelSerializer):
     restaurant_id = serializers.IntegerField(required=True)
-    promocode_id = serializers.CharField(required=True)
+    promocode_id = serializers.CharField(allow_null = True, required=False)
     address = serializers.CharField(required=True)
     items = ItemSerializer(many = True)
     email = serializers.CharField(allow_null = True, required = False)
