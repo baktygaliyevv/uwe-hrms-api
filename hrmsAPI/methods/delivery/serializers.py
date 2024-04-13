@@ -83,7 +83,7 @@ class DeliveryCreateUpdateClientSerilizer(serializers.ModelSerializer):
         flag2 = 'token' in request.COOKIES
             
         if(not flag and not flag2):
-            return Response({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_400_BAD_REQUEST)
+            return Response()
         elif((not flag and flag2) or (flag and flag2)):
             obj = UserTokens.objects.get(token=request.COOKIES['token'])
             validated_data['user_id'] = UserSerializer(obj.user).data.get('id')

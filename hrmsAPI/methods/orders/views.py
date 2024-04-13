@@ -43,9 +43,9 @@ class GetAddClientOrder(ListCreateAPIView):
     def create(self, request, *args, **kwargs):
             serializer = OrderAddClientSerializer(data=request.data, context={'request': request})
             serializer.is_valid(raise_exception=True)
-            if serializer is Response:
-                return Response({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_400_BAD_REQUEST)
             order = serializer.save()
+            if isinstance(order,Response):
+                return Response({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_400_BAD_REQUEST)
             order_serializer = OrderGetSerializer(order)
             return Response({'status': 'Ok', 'payload': order_serializer.data})
 
