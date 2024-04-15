@@ -2,10 +2,16 @@ from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db import connection
 from ...models import Menu, MenuProducts, MenuCategories, RestaurantProducts
-from .serializers import AvailableMenuSerializer, MenuSerializer, MenuProductSerializer, MenuCategorySerializer, UnavailableMenuSerializer
+from .serializers import AvailableMenuSerializer, MenuSerializer, MenuProductSerializer, MenuCategorySerializer, UnavailableMenuSerializer, MenuAddSerializer
 
-class GetMenuItems(generics.ListAPIView):
+class GetAddMenuItems(generics.ListCreateAPIView):
+    def get_serializer_class(self):
+        if self.request.method == 'list':
+            return MenuSerializer
+        return MenuAddSerializer
+
     def get(self, request, *args, **kwargs):
         queryset = Menu.objects.all()
         serializer_class = MenuSerializer(queryset, many=True)
@@ -13,15 +19,22 @@ class GetMenuItems(generics.ListAPIView):
             'status': 'Ok',
             'payload': serializer_class.data
         })
-
-class AddMenuItem(generics.CreateAPIView):
-    queryset = Menu.objects.all()
-    serializer_class = MenuSerializer
+    
+    def create(self, request, *args, **kwargs):
+        serializer = MenuAddSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        menu_serializer = MenuSerializer(serializer.save())
+        return Response({'status': 'Ok', 'payload': menu_serializer.data})
+    
 
 class EditDeleteMenuItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
     lookup_field = 'id'
+
+    def perform_destroy(self, instance):
+        MenuProducts.objects.filter(menu=instance).delete()
+        instance.delete()
 
 class AddMenuProduct(APIView):
     def post(self, request, id):
@@ -33,12 +46,18 @@ class AddMenuProduct(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteMenuProduct(APIView):
+    serializer_class = MenuProductSerializer
+    
     def delete(self, request, id, productId):
-        menu_product = generics.get_object_or_404(MenuProducts, menu_id=id, product_id=productId)
-        menu_product.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        with connection.cursor() as cursor:
+            query = """DELETE FROM menu_products WHERE menu_id = %s AND product_id = %s"""
+            cursor.execute(query, [id, productId])
+        return Response({'status':"Ok"})
 
-class GetMenuCategories(generics.ListAPIView):
+class GetAddMenuCategories(generics.ListCreateAPIView):
+    queryset = MenuCategories.objects.all()
+    serializer_class = MenuCategorySerializer
+
     def get(self, request, *args, **kwargs):
         queryset = MenuCategories.objects.all()
         serializer_class = MenuCategorySerializer(queryset, many=True)
@@ -46,10 +65,6 @@ class GetMenuCategories(generics.ListAPIView):
             'status': 'Ok',
             'payload': serializer_class.data
         })
-
-class AddMenuCategory(generics.CreateAPIView):
-    queryset = MenuCategories.objects.all()
-    serializer_class = MenuCategorySerializer
 
 @api_view(['GET'])
 def available_menu_items(request):

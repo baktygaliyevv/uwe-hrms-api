@@ -31,3 +31,10 @@ class EditDeleteProduct(generics.RetrieveUpdateDestroyAPIView):
     queryset = Products.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'id'
+
+    def update(self, request, *args, **kwargs):
+        for field in ['vegan', 'vegetarian', 'gluten_free']:
+            if field in request.data:
+                request.data[field] = int(request.data[field] == 'true' or request.data[field] == True)
+
+        return super().update(request, *args, **kwargs)
