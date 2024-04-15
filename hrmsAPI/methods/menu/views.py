@@ -3,11 +3,13 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from ...models import Menu, MenuProducts, MenuCategories, RestaurantProducts
-from .serializers import AvailableMenuSerializer, MenuSerializer, MenuProductSerializer, MenuCategorySerializer, UnavailableMenuSerializer
+from .serializers import AvailableMenuSerializer, MenuSerializer, MenuProductSerializer, MenuCategorySerializer, UnavailableMenuSerializer, MenuAddSerializer
 
 class GetAddMenuItems(generics.ListCreateAPIView):
-    queryset = Menu.objects.all()
-    serializer_class = MenuSerializer
+    def get_serializer_class(self):
+        if self.request.method == 'list':
+            return MenuSerializer
+        return MenuAddSerializer
 
     def get(self, request, *args, **kwargs):
         queryset = Menu.objects.all()
@@ -16,6 +18,13 @@ class GetAddMenuItems(generics.ListCreateAPIView):
             'status': 'Ok',
             'payload': serializer_class.data
         })
+    
+    def create(self, request, *args, **kwargs):
+        serializer = MenuAddSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        menu_serializer = MenuSerializer(serializer.save())
+        return Response({'status': 'Ok', 'payload': menu_serializer.data})
+    
 
 class EditDeleteMenuItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = Menu.objects.all()
