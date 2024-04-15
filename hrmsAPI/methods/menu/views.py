@@ -5,7 +5,10 @@ from rest_framework.views import APIView
 from ...models import Menu, MenuProducts, MenuCategories, RestaurantProducts
 from .serializers import AvailableMenuSerializer, MenuSerializer, MenuProductSerializer, MenuCategorySerializer, UnavailableMenuSerializer
 
-class GetMenuItems(generics.ListAPIView):
+class GetAddMenuItems(generics.ListCreateAPIView):
+    queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
+
     def get(self, request, *args, **kwargs):
         queryset = Menu.objects.all()
         serializer_class = MenuSerializer(queryset, many=True)
@@ -13,10 +16,6 @@ class GetMenuItems(generics.ListAPIView):
             'status': 'Ok',
             'payload': serializer_class.data
         })
-
-class AddMenuItem(generics.CreateAPIView):
-    queryset = Menu.objects.all()
-    serializer_class = MenuSerializer
 
 class EditDeleteMenuItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = Menu.objects.all()
@@ -38,7 +37,10 @@ class DeleteMenuProduct(APIView):
         menu_product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class GetMenuCategories(generics.ListAPIView):
+class GetAddMenuCategories(generics.ListCreateAPIView):
+    queryset = MenuCategories.objects.all()
+    serializer_class = MenuCategorySerializer
+
     def get(self, request, *args, **kwargs):
         queryset = MenuCategories.objects.all()
         serializer_class = MenuCategorySerializer(queryset, many=True)
@@ -46,10 +48,6 @@ class GetMenuCategories(generics.ListAPIView):
             'status': 'Ok',
             'payload': serializer_class.data
         })
-
-class AddMenuCategory(generics.CreateAPIView):
-    queryset = MenuCategories.objects.all()
-    serializer_class = MenuCategorySerializer
 
 @api_view(['GET'])
 def available_menu_items(request):
