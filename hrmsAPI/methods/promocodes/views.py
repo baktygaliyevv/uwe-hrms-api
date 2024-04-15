@@ -21,15 +21,9 @@ class GetAddPromocodes(generics.ListCreateAPIView):
             'payload': PromocodeSerializer(promocode).data
             })
 
-
-class DeletePromocode(generics.DestroyAPIView):
+class GetDeleteSpecificPromocode(generics.RetrieveDestroyAPIView):
     queryset = Promocodes.objects.all()
     serializer_class = PromocodeSerializer
-    lookup_field = 'id'
-
-class GetSpecificPromocode(generics.RetrieveAPIView):
-    queryset = Promocodes.objects.all()
-    serializer_class = PromocodeSerializer  # Just a reference to the class
     lookup_field = 'id'
 
     def get(self, request, *args, **kwargs):

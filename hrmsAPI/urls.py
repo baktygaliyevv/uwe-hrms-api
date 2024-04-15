@@ -20,7 +20,7 @@ from django.http import HttpResponse
 from .methods.users.views import UserListCreateAPIView, EditDeleteUser
 from .methods.menu.views import GetMenuItems, AddMenuItem, EditDeleteMenuItem, AddMenuCategory, AddMenuProduct, DeleteMenuProduct, GetMenuCategories, available_menu_items, unavailable_menu_items
 from .methods.products.views import GetAddProducts, EditDeleteProduct
-from .methods.promocodes.views import GetAddPromocodes, DeletePromocode, GetSpecificPromocode
+from .methods.promocodes.views import GetAddPromocodes, GetDeleteSpecificPromocode
 from .methods.tables.views import EditDeleteTable, GetAddTables
 from .methods.orders.views import GetAddOrder, GetAddClientOrder, EditDeleteOrder, AddOrderMenu, EditDeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
@@ -54,8 +54,7 @@ urlpatterns = [
 
     #promocodes
     path(f'{API_BASE_URL}promocodes', GetAddPromocodes.as_view(), name='get-add-promocodes'),
-    path(f'{API_BASE_URL}promocodes/<id>', DeletePromocode.as_view(), name='delete-promocode'),
-    path(f'{API_BASE_URL}promocodes/<id>', GetSpecificPromocode.as_view(), name='get-specific-promocode'),
+    path(f'{API_BASE_URL}promocodes/<id>', GetDeleteSpecificPromocode.as_view(), name='get-specific-promocode'),
 
     #tables
     path(f'{API_BASE_URL}tables', GetAddTables.as_view(), name='get-add-tables'),
