@@ -31,6 +31,10 @@ class EditDeleteMenuItem(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MenuSerializer
     lookup_field = 'id'
 
+    def perform_destroy(self, instance):
+        MenuProducts.objects.filter(menu=instance).delete()
+        instance.delete()
+
 class AddMenuProduct(APIView):
     def post(self, request, id):
         menu = generics.get_object_or_404(Menu, id=id)
