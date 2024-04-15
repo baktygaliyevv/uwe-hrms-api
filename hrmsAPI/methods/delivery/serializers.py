@@ -64,8 +64,8 @@ class DeliveryCreateUpdateClientSerilizer(serializers.ModelSerializer):
     address = serializers.CharField(required=True)
     items = ItemSerializer(many = True)
     email = serializers.CharField(allow_null = True, required = False)
-    first_name = serializers.CharField(required=True)
-    last_name= serializers.CharField(required=True)
+    first_name = serializers.CharField(allow_null = True, required = False)
+    last_name= serializers.CharField(allow_null = True, required = False)
     created_at = serializers.DateTimeField(required = False)
     user_id = serializers.IntegerField(required=False)
 
@@ -83,7 +83,7 @@ class DeliveryCreateUpdateClientSerilizer(serializers.ModelSerializer):
         flag2 = 'token' in request.COOKIES
             
         if(not flag and not flag2):
-            return Response()
+            return Response({})
         elif((not flag and flag2) or (flag and flag2)):
             obj = UserTokens.objects.get(token=request.COOKIES['token'])
             validated_data['user_id'] = UserSerializer(obj.user).data.get('id')
@@ -101,7 +101,7 @@ class DeliveryCreateUpdateClientSerilizer(serializers.ModelSerializer):
                 role = 'client',
                 verified = 0
             )
-            validated_data['user_id'] = user.id
+            validated_data['user_id'] = UserSerializer(user).data.get('id')
 
         validated_data['created_at'] = timezone.now()
         validated_data['status'] = 'new'

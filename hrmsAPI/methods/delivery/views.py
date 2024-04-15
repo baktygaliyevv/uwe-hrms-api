@@ -61,18 +61,11 @@ class GetAddClientDeliveries(ListCreateAPIView):
             'payload': serializer_class.data
         })
     
-    def create(self, request, *args, **kwargs):
-        email = request.data.get('email', None)
-
-        if not request.user.is_authenticated:
-            if not email:
-                return Response({'error': 'Email is required for unregistered users'}, status=status.HTTP_400_BAD_REQUEST)          
-            elif Users.objects.filter(email=email).exists():
-                return Response({'error': 'User with this email already exists. Please log in.'}, status=status.HTTP_400_BAD_REQUEST) # вот тут темка, что если добавляем доставку на такого же юзера просят залогиниться при этом если юзер создался без пароля хз как логиниться, но в целом это маловероятно что произойдет, на презентации не спалят и вряд ли заметят, так то все работает заебись помимо вот этого маленького недочета, я апрув, поставлю но на будущее такой долгий коммент оставлю мб потом пофиксим
-            
-            
+    def create(self, request, *args, **kwargs):       
         serializer = DeliveryCreateUpdateClientSerilizer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-        order = serializer.save()
-        order_serializer = DeliveryReadSerializer(order)
-        return Response({'status': 'Ok', 'payload': order_serializer.data}, status=status.HTTP_201_CREATED)
+        delivery = serializer.save()
+        if isinstance(delivery,Response):
+                return Response({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_400_BAD_REQUEST)
+        delivery_serializer = DeliveryReadSerializer(delivery)
+        return Response({'status': 'Ok', 'payload': delivery_serializer.data})
