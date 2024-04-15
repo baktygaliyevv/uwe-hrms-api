@@ -46,10 +46,11 @@ class MenuSerializer(serializers.ModelSerializer):
         return ProductSerializer(products, many=True).data
     
     def create(self, validated_data):
-        menu_products_data = validated_data.pop('menu_products')
+        products_ids = validated_data.get('products', [])
         menu = Menu.objects.create(**validated_data)
-        for product_data in menu_products_data:
-            MenuProducts.objects.create(menu=menu, **product_data)
+        for product_id in products_ids:
+            product_instance = Products.objects.get(id=product_id)
+            MenuProducts.objects.create(menu=menu, product=product_instance)
         return menu
     
     def update(self, instance, validated_data):
