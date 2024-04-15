@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db import connection
 from ...models import Menu, MenuProducts, MenuCategories, RestaurantProducts
 from .serializers import AvailableMenuSerializer, MenuSerializer, MenuProductSerializer, MenuCategorySerializer, UnavailableMenuSerializer, MenuAddSerializer
 
@@ -45,10 +46,13 @@ class AddMenuProduct(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteMenuProduct(APIView):
+    serializer_class = MenuProductSerializer
+    
     def delete(self, request, id, productId):
-        menu_product = generics.get_object_or_404(MenuProducts, menu_id=id, product_id=productId)
-        menu_product.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        with connection.cursor() as cursor:
+            query = """DELETE FROM menu_products WHERE menu_id = %s AND product_id = %s"""
+            cursor.execute(query, [id, productId])
+        return Response({'status':"Ok"})
 
 class GetAddMenuCategories(generics.ListCreateAPIView):
     queryset = MenuCategories.objects.all()
