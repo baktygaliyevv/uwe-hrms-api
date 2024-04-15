@@ -129,8 +129,8 @@ class OrderAddClientSerializer(serializers.ModelSerializer):
     promocode_id = serializers.CharField(allow_null = True, required=False)
     items = ItemSerializer(many = True)
     email = serializers.CharField(allow_null = True, required = False)
-    first_name = serializers.CharField(required=True)
-    last_name= serializers.CharField(required=True)
+    first_name = serializers.CharField(allow_null = True, required = False)
+    last_name= serializers.CharField(allow_null = True, required = False)
     created_at = serializers.DateTimeField(required = False)
     user_id = serializers.IntegerField(required=False)
 
