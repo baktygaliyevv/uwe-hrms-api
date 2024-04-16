@@ -87,10 +87,6 @@ class DeliveryCreateUpdateClientSerilizer(serializers.ModelSerializer):
         elif((not flag and flag2) or (flag and flag2)):
             obj = UserTokens.objects.get(token=request.COOKIES['token'])
             validated_data['user_id'] = UserSerializer(obj.user).data.get('id')
-            validated_data.pop('first_name')
-            validated_data.pop('last_name')
-            if validated_data.get('email')!= None:
-                validated_data.pop('email')
         else:
             user = Users.objects.create(
                 first_name = validated_data.pop('first_name'),
