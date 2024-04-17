@@ -12,7 +12,7 @@ def auth_middleware(get_response):
     def middleware(request):
         url_name = resolve(request.path_info).url_name
       
-        open_paths = ['auth-login', 'auth-signup', 'auth-verify', 'get-restaurants', 'get-tables', 'get-menu-item', 'get-menu-categories', 'get-add-client-order', 'get-add-client-delivery', 'get-specific-promocode', 'get-add-tables', 'available-menu-items', 'unavailable-menu-items']
+        open_paths = ['auth-login', 'auth-signup', 'auth-verify', 'get-restaurants', 'get-tables', 'get-add-menu-item', 'get-menu-categories', 'get-add-client-order', 'get-add-client-delivery', 'get-specific-promocode', 'get-add-tables', 'available-menu-items', 'unavailable-menu-items']
 
         if url_name in open_paths:
             return get_response(request)
@@ -21,7 +21,6 @@ def auth_middleware(get_response):
             'get-add-users': ['admin'],  
             'edit-delete-user': ['admin'],
 
-            'add-menu-item': ['admin'], 
             'edit-delete-menu-item': ['admin'], 
             'add-menu-product': ['admin'], 
             'delete-menu-product': ['admin'], 
