@@ -22,7 +22,7 @@ class Bookings(models.Model):
 
 
 class Deliveries(models.Model):
-    user = models.ForeignKey('Users', models.DO_NOTHING)
+    user = models.ForeignKey('Users', on_delete=models.SET_NULL, blank=True, null=True)
     restaurant = models.ForeignKey('Restaurants', models.DO_NOTHING)
     promocode = models.ForeignKey('Promocodes', models.DO_NOTHING, blank=True, null=True)
     address = models.TextField()
@@ -95,7 +95,7 @@ class OrderMenu(models.Model):
 
 
 class Orders(models.Model):
-    user = models.ForeignKey('Users', models.DO_NOTHING, blank=True, null=True)
+    user = models.ForeignKey('Users', on_delete=models.SET_NULL, blank=True, null=True)
     table = models.ForeignKey('Tables', models.DO_NOTHING)
     promocode = models.ForeignKey('Promocodes', models.DO_NOTHING, blank=True, null=True)
     created_at = models.DateTimeField()
