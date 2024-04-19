@@ -10,7 +10,7 @@ from django.db import models
 import hashlib
 
 class Bookings(models.Model):
-    user = models.ForeignKey('Users', models.DO_NOTHING)
+    user = models.ForeignKey('Users', on_delete=models.SET_NULL, blank=True, null=True)
     table = models.ForeignKey('Tables', models.DO_NOTHING)
     persons = models.IntegerField()
     date = models.DateTimeField()
@@ -46,7 +46,7 @@ class DeliveryMenu(models.Model):
 
 class EmailCodes(models.Model):
     code = models.CharField(primary_key=True, max_length=32)
-    user = models.ForeignKey('Users', models.DO_NOTHING)
+    user = models.ForeignKey('Users', on_delete=models.SET_NULL, blank=True, null=True)
     expiration_date = models.DateTimeField()
 
     class Meta:
@@ -156,7 +156,7 @@ class Tables(models.Model):
 
 class UserTokens(models.Model):
     token = models.CharField(primary_key=True, max_length=64)
-    user = models.ForeignKey('Users', models.DO_NOTHING)
+    user = models.ForeignKey('Users', on_delete=models.SET_NULL, blank=True, null=True)
     expiration_date = models.DateTimeField()
 
     class Meta:
