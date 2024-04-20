@@ -30,3 +30,11 @@
 
 5. **API Documentation:**
 The API documentation is available via Swagger UI, which can be accessed at `https://uwe.dyzoon.dev/api/v1/swagger/`
+
+## Hosted Site
+
+For easy access and evaluation, the web client is also hosted and available for use at the following URL:
+
+   - uwe.dyzoon.dev
+
+Feel free to visit and interact with the live application.
