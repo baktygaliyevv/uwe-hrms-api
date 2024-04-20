@@ -1,0 +1,21 @@
+|            email             |  password |   role   |
+|------------------------------|-----------|----------|
+| Emmett_Harvey@gmail.com      |  qwerty   |  admin   |
+| Darrell_Jacobson@gmail.com   |  qwerty   | manager  |
+| Luann_Wallace@gmail.com      |  qwerty   | manager  |
+| Korey_Patton@gmail.com       |  qwerty   |   chef   |
+| Coleman_Nichols@gmail.com    |  qwerty   |   chef   |
+| Marcella_Ware@gmail.com      |  qwerty   |   chef   |
+| Frank_David@gmail.com        |  qwerty   |  staff   |
+| Tamara_Collins@gmail.com     |  qwerty   |  staff   |
+| Lucio_Weber@gmail.com        |  qwerty   |  staff   |
+| Columbus_Rasmussen@gmail.com |  qwerty   |  staff   |
+| Mamie_Jimenez@gmail.com      |  qwerty   |  staff   |
+| Jayne_Hughes@gmail.com       |  qwerty   | courier  |
+| Amie_Baxter@gmail.com        |  qwerty   | courier  |
+| Milford_Carney@gmail.com     |  qwerty   |  client  |
+| Denny_Buckley@gmail.com      |  qwerty   |  client  |
+| Jarrett_Smith@gmail.com      |  qwerty   |  client  |
+| Jo_Walker@gmail.com          |  qwerty   |  client  |
+| Oren_Arroyo@gmail.com        |  qwerty   |  client  |
+| Lupe_Harmon@gmail.com        |  qwerty   |  client  |
