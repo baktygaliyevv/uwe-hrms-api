@@ -25,7 +25,7 @@ from .methods.tables.views import EditDeleteTable, GetAddTables
 from .methods.orders.views import GetAddOrder, GetAddClientOrder, EditDeleteOrder, AddOrderMenu, EditDeleteOrderMenu
 from .methods.restaurants.views import GetRestaurant,DeleteRestaurant
 from .methods.auth.views import AuthView, AuthLoginView, AuthSignupView, AuthVerifyView
-from .methods.delivery.views import GetAddDelivery, EditDeleteDelivery, GetAddClientDeliveries
+from .methods.delivery.views import GetAddDelivery, EditDeleteDelivery, GetAddClientDeliveries, AddDeliveryMenu,EditDeleteDeliveryMenu
 from .methods.storage.views import GetRetaurantProducts, IncRestaurntProducts, DecRestaurntProducts
 from .methods.bookings.views import GetAddBookings, EditDeleteBooking, ClientGetAddBookings
 
@@ -79,6 +79,8 @@ urlpatterns = [
     path(f'{API_BASE_URL}deliveries', GetAddDelivery.as_view(),name='get-add-delivery'),
     path(f'{API_BASE_URL}deliveries/client', GetAddClientDeliveries.as_view(),name='get-add-client-delivery'),
     path(f'{API_BASE_URL}deliveries/<int:id>', EditDeleteDelivery.as_view(), name='edit-delete-delivery'),
+    path(f'{API_BASE_URL}deliveries/<int:delivery_id>/items', AddDeliveryMenu.as_view(),name='add-delivery-menu-items'),
+    path(f'{API_BASE_URL}deliveries/<int:delivery_id>/items/<int:menu_id>',EditDeleteDeliveryMenu.as_view(),name='edit-delete-delivery-menu-item'),
 
     #storage
     path(f'{API_BASE_URL}storage', GetRetaurantProducts.as_view(), name = 'get-retaurant-products'),

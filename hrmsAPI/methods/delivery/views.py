@@ -2,8 +2,8 @@ from rest_framework import generics, status
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from ...models import Deliveries, UserTokens, Users
-from .serializers import DeliveryReadSerializer, DeliveryCreateUpdateSerializer, DeliveryReadClientSerializer, DeliveryCreateUpdateClientSerilizer, DeliveryEditDeleteSerializer
+from ...models import Deliveries, UserTokens, Users, DeliveryMenu, Menu
+from .serializers import DeliveryReadSerializer, DeliveryCreateUpdateSerializer, DeliveryReadClientSerializer, DeliveryCreateUpdateClientSerilizer, DeliveryEditDeleteSerializer, MultipleFieldLookupMixin, DeliveryMenuEditDeleteSerializer, DeliveryMenuAddSerializer, DeliveryMenuSerializer, MenuSerializer
 from ..users.serializers import UserSerializer
 
 class GetAddDelivery(ListCreateAPIView):
@@ -22,9 +22,9 @@ class GetAddDelivery(ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = DeliveryCreateUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        order = serializer.save()
-        order_serializer = DeliveryReadSerializer(order)
-        return Response({'status': 'Ok', 'payload': order_serializer.data}, status=status.HTTP_201_CREATED)
+        delivery = serializer.save()
+        delivery_serializer = DeliveryReadSerializer(delivery)
+        return Response({'status': 'Ok', 'payload': delivery_serializer.data}, status=status.HTTP_201_CREATED)
 
 class EditDeleteDelivery(generics.RetrieveUpdateDestroyAPIView):
     queryset = Deliveries.objects.all()
@@ -69,3 +69,54 @@ class GetAddClientDeliveries(ListCreateAPIView):
                 return Response({ "status": "Error", "payload": "Unauthorized" }, status=status.HTTP_400_BAD_REQUEST)
         delivery_serializer = DeliveryReadSerializer(delivery)
         return Response({'status': 'Ok', 'payload': delivery_serializer.data})
+    
+class EditDeleteDeliveryMenu(MultipleFieldLookupMixin,generics.RetrieveUpdateDestroyAPIView):
+    queryset = DeliveryMenu.objects.all()
+    serializer_class = DeliveryMenuEditDeleteSerializer
+    lookup_fields = ('delivery_id','menu_id')
+
+    def update(self,request,*args,**kwargs):
+        item_id = self.kwargs.get('menu_id')
+        delivery_id = self.kwargs.get('delivery_id')
+        item = DeliveryMenu.objects.get(delivery_id=delivery_id, menu_id=item_id)
+        serializer = self.get_serializer(instance=item, data=request.data)
+        serializer.is_valid(raise_exception = True)
+        serializer.save(delivery_id = delivery_id,menu_id = item_id)
+        menu = Menu.objects.get(pk=item_id)
+        item_serializer = MenuSerializer(menu)
+        return_data = {
+            'item': item_serializer.data,
+            'quantity': serializer.validated_data.get('quantity')
+        }
+        return Response({
+            'status':'Ok', 
+            'payload': return_data
+        })
+    
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({'status': 'Ok'})
+    
+
+class AddDeliveryMenu(generics.CreateAPIView):
+    serializer_class = DeliveryMenuAddSerializer
+    queryset = DeliveryMenu.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        delivery_id = self.kwargs.get('delivery_id')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception = True)
+        serializer.validated_data['menu_id'] = serializer.validated_data.pop('item_id')
+        serializer.save(delivery_id = delivery_id)
+        menu_id = serializer.validated_data.get('menu_id')
+        menu = Menu.objects.get(pk=menu_id)
+        item_serializer = MenuSerializer(menu)
+        return_data = {
+            'item': item_serializer.data,
+            'quantity': serializer.validated_data.get('quantity')
+        }
+        return Response({
+            'status':'Ok', 
+            'payload': return_data
+        })
