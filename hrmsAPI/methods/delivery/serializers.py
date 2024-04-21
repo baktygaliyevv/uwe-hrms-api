@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework import status
+from django.shortcuts import get_object_or_404
 from ...models import Deliveries, DeliveryMenu, Users, Restaurants, Promocodes, Menu, UserTokens
 from ..menu.serializers import MenuSerializer
 from ..users.serializers import UserSerializer
@@ -9,6 +10,34 @@ from ..restaurants.serializers import RestaurantSerializer
 from ..orders.serializers import ItemSerializer
 from django.utils import timezone
 #from ..users.views import Users
+
+class DeliveryMenuAddSerializer(serializers.ModelSerializer):
+    item = MenuSerializer(read_only=True,many=True)
+    item_id = serializers.IntegerField()
+
+    class Meta:
+        model = DeliveryMenu
+        fields = ['item','item_id','quantity']
+
+class DeliveryMenuEditDeleteSerializer(serializers.ModelSerializer):
+    quantity = serializers.IntegerField()
+
+    class Meta:
+        model = DeliveryMenu
+        fields = ['quantity']
+
+
+class MultipleFieldLookupMixin(object):
+    def get_object(self):
+        queryset = self.get_queryset()            
+        queryset = self.filter_queryset(queryset) 
+        filter = {}
+        for field in self.lookup_fields:
+            try:                                 
+                filter[field] = self.kwargs[field]
+            except Exception:
+                pass
+        return get_object_or_404(queryset, **filter)
 
 class DeliveryMenuSerializer(serializers.ModelSerializer):
     class Meta:
@@ -130,9 +159,9 @@ class DeliveryReadClientSerializer(serializers.ModelSerializer):
 
 class DeliveryEditDeleteSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(allow_null=True)
-    restaurant_id = serializers.IntegerField(required=True)
-    promocode_id = serializers.CharField(required=True)
-    status = serializers.CharField(required=True)
+    restaurant_id = serializers.IntegerField(allow_null=True)
+    promocode_id = serializers.CharField(allow_null=True)
+    status = serializers.CharField(allow_null=True)
 
     class Meta:
         model = Deliveries
@@ -140,9 +169,9 @@ class DeliveryEditDeleteSerializer(serializers.ModelSerializer):
     
     def destroy(self, validated_data):
         items_data = validated_data.pop('items')
-        order = Deliveries.objects.delete(**validated_data)
+        delivery = Deliveries.objects.delete(**validated_data)
         for menu_data in items_data:
-            DeliveryMenu.objects.delete(order=order, **menu_data)
+            DeliveryMenu.objects.delete(delivery=delivery, **menu_data)
         return Response({
                 'status':'Ok', 
             })
